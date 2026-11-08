@@ -12,7 +12,6 @@
       --bg: #0D0B14;
       --sidebar: #13101D;
       --card: #191426;
-      --card-hover: #221a33;
       --primary: #8052E8;
       --primary-hover: #9468f0;
       --primary-dim: rgba(128, 82, 232, 0.15);
@@ -31,28 +30,22 @@
       font-size: 16px;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      -webkit-text-size-adjust: 100%;
     }
     body { overflow: hidden; }
     a { color: inherit; text-decoration: none; }
     button, input, select { font-family: inherit; }
-
-    a:focus, button:focus, input:focus, select:focus {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
-    }
+    a:focus, button:focus, input:focus, select:focus { outline: 2px solid var(--primary); outline-offset: 2px; }
     a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
 
     .app { display: flex; height: 100vh; height: 100%; }
 
-    /* ===== Sidebar ===== */
+    /* Sidebar */
     .sidebar {
       width: 260px; flex-shrink: 0;
       background: var(--sidebar);
       border-right: 1px solid var(--border);
       display: flex; flex-direction: column;
-      padding: 24px 16px 16px;
-      overflow-y: auto;
+      padding: 24px 16px 16px; overflow-y: auto;
     }
     .logo {
       font-size: 22px; font-weight: 800; letter-spacing: 3px;
@@ -81,9 +74,8 @@
       margin-top: 16px; font-size: 13px; color: var(--muted);
     }
 
-    /* ===== Main ===== */
+    /* Main */
     .main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 32px 40px 64px; }
-
     @media (max-width: 1100px) { .main { padding: 24px 24px 48px; } }
     @media (max-width: 800px) {
       .app { flex-direction: column; }
@@ -93,44 +85,29 @@
         border-bottom: 1px solid var(--border);
         overflow-x: auto; overflow-y: hidden;
       }
-      .logo {
-        padding: 0 16px 0 0; border-bottom: none;
-        border-right: 1px solid var(--border);
-        margin-bottom: 0; flex-shrink: 0;
-      }
+      .logo { padding: 0 16px 0 0; border-bottom: none; border-right: 1px solid var(--border); margin-bottom: 0; flex-shrink: 0; }
       .nav { flex-direction: row; gap: 4px; flex: none; }
       .nav-item { padding: 10px 14px; white-space: nowrap; font-size: 15px; }
       .sidebar-footer { display: none; }
       .main { padding: 20px 16px 40px; }
     }
 
-    /* ===== Typography ===== */
     .view-title { font-size: 32px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; }
     .view-subtitle { font-size: 15px; color: var(--muted); margin-bottom: 28px; }
     @media (max-width: 800px) { .view-title { font-size: 24px; } }
 
-    /* ===== Hero ===== */
+    /* Hero */
     .hero {
       background: linear-gradient(135deg, #1f1834 0%, #13101D 100%);
       border: 1px solid var(--border); border-radius: 16px;
       padding: 40px; margin-bottom: 32px;
       display: flex; gap: 32px; align-items: center;
     }
-    .hero-cover {
-      width: 200px; flex-shrink: 0; border-radius: 12px;
-      overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.5);
-    }
+    .hero-cover { width: 200px; flex-shrink: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.5); }
     .hero-cover .cover-wrap { border-radius: 12px; }
-    .hero-cover .cover-letter { font-size: 72px; }
     .hero-content { flex: 1; min-width: 0; }
-    .hero-label {
-      font-size: 12px; text-transform: uppercase; letter-spacing: 2px;
-      color: var(--primary); font-weight: 700; margin-bottom: 12px;
-    }
-    .hero-title {
-      font-size: 36px; font-weight: 800; margin-bottom: 12px;
-      line-height: 1.15; word-break: break-word;
-    }
+    .hero-label { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); font-weight: 700; margin-bottom: 12px; }
+    .hero-title { font-size: 36px; font-weight: 800; margin-bottom: 12px; line-height: 1.15; word-break: break-word; }
     .hero-meta { color: var(--muted); font-size: 15px; margin-bottom: 24px; }
     .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
     @media (max-width: 800px) {
@@ -139,7 +116,7 @@
       .hero-title { font-size: 24px; }
     }
 
-    /* ===== Buttons ===== */
+    /* Buttons */
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
       min-height: 48px; padding: 0 22px; border-radius: 10px;
@@ -154,28 +131,18 @@
     .btn-danger { background: transparent; color: var(--danger); border-color: rgba(232,90,90,0.4); }
     .btn-danger:hover { background: rgba(232,90,90,0.1); }
 
-    /* ===== Stats ===== */
-    .stats-row {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 16px; margin-bottom: 40px;
-    }
-    .stat-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 22px;
-    }
+    /* Stats */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
     .stat-value { font-size: 28px; font-weight: 800; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
     .stat-label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-    @media (max-width: 800px) {
-      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .stat-value { font-size: 22px; }
-    }
+    @media (max-width: 800px) { .stats-row { grid-template-columns: repeat(2, 1fr); gap: 12px; } .stat-value { font-size: 22px; } }
 
-    /* ===== Sections ===== */
     .section { margin-bottom: 40px; }
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .section-title { font-size: 20px; font-weight: 700; }
 
-    /* ===== Search ===== */
+    /* Search */
     .search-wrap { position: relative; margin-bottom: 16px; }
     .search-input {
       width: 100%; min-height: 52px; padding: 0 20px 0 52px;
@@ -185,12 +152,9 @@
     }
     .search-input::placeholder { color: var(--muted); }
     .search-input:focus { border-color: var(--primary); }
-    .search-icon {
-      position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
-      color: var(--muted); pointer-events: none; font-size: 18px;
-    }
+    .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; font-size: 18px; }
 
-    /* ===== Chips ===== */
+    /* Chips */
     .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
     .chip {
       min-height: 40px; padding: 0 16px;
@@ -201,7 +165,7 @@
     .chip:hover { border-color: var(--primary); color: var(--text); }
     .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    /* ===== Toolbar ===== */
+    /* Toolbar */
     .toolbar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
     .toolbar-group { display: flex; align-items: center; gap: 8px; }
     .toolbar-label { font-size: 14px; color: var(--muted); font-weight: 500; }
@@ -215,15 +179,9 @@
     }
     .select:focus { border-color: var(--primary); }
 
-    /* ===== Game grid ===== */
-    .game-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 20px;
-    }
-    @media (max-width: 800px) {
-      .game-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
-    }
+    /* Game grid */
+    .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+    @media (max-width: 800px) { .game-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; } }
 
     .game-card {
       position: relative;
@@ -236,19 +194,27 @@
     .game-card-link:focus { outline-offset: -2px; }
 
     .cover-wrap { position: relative; padding-top: 133.33%; background: #1f1830; overflow: hidden; }
-    .cover-img, .cover-placeholder {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    }
+    .cover-img, .cover-placeholder { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     .cover-img { object-fit: cover; display: block; }
+
     .cover-placeholder {
-      background: linear-gradient(135deg, #2a1f4a 0%, #191426 100%);
-      display: flex; align-items: center; justify-content: center;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 14px; text-align: center;
     }
     .cover-letter {
-      font-size: 56px; font-weight: 800;
-      color: rgba(128, 82, 232, 0.55); user-select: none;
+      font-size: 64px; font-weight: 800; line-height: 1;
+      margin-bottom: 10px; user-select: none;
+    }
+    .cover-name-small {
+      font-size: 11px; color: rgba(255,255,255,0.7);
+      line-height: 1.3; max-width: 100%;
+      display: -webkit-box; -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical; overflow: hidden;
+      word-break: break-word; padding: 0 4px;
     }
     .hero-cover .cover-letter, .detail-cover .cover-letter { font-size: 96px; }
+    .hero-cover .cover-name-small, .detail-cover .cover-name-small { font-size: 13px; }
 
     .game-card-info { padding: 12px 14px 16px; }
     .game-card-title {
@@ -268,60 +234,35 @@
       z-index: 2;
     }
     .game-card-fav:hover { color: var(--primary); border-color: var(--primary); }
-    .game-card-fav.active {
-      color: var(--primary); background: var(--primary-dim); border-color: var(--primary);
-    }
+    .game-card-fav.active { color: var(--primary); background: var(--primary-dim); border-color: var(--primary); }
 
-    /* ===== Pagination ===== */
-    .pagination {
-      display: flex; justify-content: center; align-items: center;
-      gap: 6px; margin-top: 32px; flex-wrap: wrap;
-    }
+    /* Pagination */
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 32px; flex-wrap: wrap; }
     .page-btn {
       min-width: 44px; height: 44px; padding: 0 12px;
       background: var(--card); border: 1px solid var(--border); border-radius: 8px;
       color: var(--text); font-size: 15px; font-weight: 500; cursor: pointer;
       transition: background 0.15s, border-color 0.15s;
     }
-    .page-btn:hover:not(:disabled):not(.active) {
-      border-color: var(--primary); background: var(--primary-dim);
-    }
+    .page-btn:hover:not(:disabled):not(.active) { border-color: var(--primary); background: var(--primary-dim); }
     .page-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; cursor: default; }
     .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .page-ellipsis { padding: 0 4px; color: var(--muted); user-select: none; }
 
-    /* ===== Detail ===== */
+    /* Detail */
     .detail { display: grid; grid-template-columns: 280px 1fr; gap: 40px; align-items: start; }
-    .detail-cover {
-      border-radius: 16px; overflow: hidden;
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
-    }
+    .detail-cover { border-radius: 16px; overflow: hidden; box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5); }
     .detail-cover .cover-wrap { border-radius: 16px; overflow: hidden; }
-    .detail-title {
-      font-size: 38px; font-weight: 800; line-height: 1.15;
-      margin-bottom: 12px; word-break: break-word; letter-spacing: -0.5px;
-    }
-    .detail-meta {
-      display: flex; flex-wrap: wrap; gap: 12px;
-      margin-bottom: 24px; color: var(--muted); font-size: 14px;
-    }
-    .meta-pill {
-      padding: 6px 12px; background: var(--card); border: 1px solid var(--border);
-      border-radius: 20px; font-weight: 500; color: var(--text);
-    }
+    .detail-title { font-size: 38px; font-weight: 800; line-height: 1.15; margin-bottom: 12px; word-break: break-word; letter-spacing: -0.5px; }
+    .detail-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; color: var(--muted); font-size: 14px; }
+    .meta-pill { padding: 6px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; font-weight: 500; color: var(--text); }
     .detail-section { margin-top: 28px; padding-top: 28px; border-top: 1px solid var(--border); }
-    .detail-section-title {
-      font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;
-      color: var(--muted); margin-bottom: 14px; font-weight: 700;
-    }
-    .download-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px;
-    }
+    .detail-section-title { font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 14px; font-weight: 700; }
+    .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
     .download-btn {
       display: flex; align-items: center; justify-content: center; gap: 8px;
       min-height: 48px; padding: 0 16px; border-radius: 10px;
-      font-size: 15px; font-weight: 600; transition: background 0.15s;
-      text-decoration: none;
+      font-size: 15px; font-weight: 600; transition: background 0.15s; text-decoration: none;
     }
     .btn-mediafire { background: #1e88e5; color: #fff; }
     .btn-mediafire:hover { background: #1565c0; }
@@ -337,50 +278,36 @@
       .detail-title { font-size: 26px; }
     }
 
-    /* ===== Letters ===== */
-    .letter-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px;
-    }
+    /* Letter grid */
+    .letter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
     .letter-card {
       background: var(--card); border: 1px solid var(--border); border-radius: 12px;
       padding: 22px 16px; text-align: center; cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-      color: var(--text);
+      transition: border-color 0.15s, background 0.15s; color: var(--text);
     }
     .letter-card:hover { border-color: var(--primary); background: var(--primary-dim); }
     .letter-card-letter { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
     .letter-card-count { font-size: 13px; color: var(--muted); }
 
-    /* ===== States ===== */
+    /* States */
     .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
     .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
     .empty-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
     .empty-text { font-size: 15px; margin-bottom: 24px; }
 
     .loading { text-align: center; padding: 60px 20px; color: var(--muted); }
-    .spinner {
-      width: 40px; height: 40px; margin: 0 auto 16px;
-      border: 3px solid var(--border); border-top-color: var(--primary);
-      border-radius: 50%; animation: spin 0.8s linear infinite;
-    }
+    .spinner { width: 40px; height: 40px; margin: 0 auto 16px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .error { text-align: center; padding: 60px 20px; max-width: 500px; margin: 0 auto; }
     .error-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
     .error-text { font-size: 14px; color: var(--muted); margin-bottom: 24px; word-break: break-word; }
 
-    .back-link {
-      display: inline-flex; align-items: center; gap: 8px;
-      color: var(--muted); font-size: 15px; font-weight: 500;
-      margin-bottom: 24px; cursor: pointer; background: none; border: none; padding: 8px 0;
-    }
+    .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 15px; font-weight: 500; margin-bottom: 24px; cursor: pointer; background: none; border: none; padding: 8px 0; }
     .back-link:hover { color: var(--text); }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
       .spinner { animation: none; border-color: var(--primary); }
     }
   </style>
@@ -409,14 +336,27 @@
   (function() {
     'use strict';
 
+    /* ============================================================
+       CONFIG — pega tu API key de RAWG (gratis en rawg.io/apidocs)
+       ============================================================ */
+    var RAWG_API_KEY = '6b8a626f8f8494b8c57d82c5d276f04ef76474880b9466e4613c5d686e17906d';
+
     var PAGE_SIZE = 48;
     var FAV_KEY = 'nexora_favorites_v1';
+    var COVER_CACHE_KEY = 'nexora_cover_cache_v1';
+    var COVER_CACHE_MAX = 5000; /* límite para no reventar localStorage */
+    var RAW_SEARCH_DELAY = 300; /* ms entre búsquedas RAWG en cola */
 
     var state = {
       games: [],
       gamesById: {},
       letters: [],
       favorites: [],
+      covers: {},            /* covers.json estático opcional */
+      coverCache: {},        /* name -> url resuelta por RAWG (persistida) */
+      pendingCovers: {},     /* name -> true mientras se busca */
+      rawQueue: [],
+      rawBusy: false,
       loaded: false,
       error: null,
       route: '',
@@ -429,7 +369,7 @@
     var favBadgeEl = document.getElementById('favBadge');
     var mainEl = document.getElementById('main');
 
-    /* ---------- Utilities ---------- */
+    /* ---------- Utils ---------- */
     function getLetter(name) {
       if (!name || typeof name !== 'string') return '#';
       var c = name.charAt(0).toUpperCase();
@@ -459,16 +399,175 @@
              '&game=' + encodeURIComponent(String(name)) +
              '&host=' + encodeURIComponent(String(host));
     }
-    function getExternalCoverUrl(game) {
-      var cand = [game.cover_url, game.cover, game.image, game.artwork];
-      for (var i = 0; i < cand.length; i++) if (isValidHttpUrl(cand[i])) return cand[i];
-      return null;
-    }
     function el(tag, cls, text) {
       var n = document.createElement(tag);
       if (cls) n.className = cls;
       if (text !== undefined && text !== null) n.textContent = String(text);
       return n;
+    }
+    function slugify(name) {
+      return String(name).toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .substring(0, 80);
+    }
+    function hashCode(str) {
+      var h = 0, i;
+      for (i = 0; i < str.length; i++) {
+        h = ((h << 5) - h) + str.charCodeAt(i);
+        h = h & 0x7fffffff;
+      }
+      return h;
+    }
+
+    /* ---------- Cover cache (localStorage) ---------- */
+    function loadCoverCache() {
+      try {
+        var raw = localStorage.getItem(COVER_CACHE_KEY);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+            state.coverCache = parsed;
+            return;
+          }
+        }
+      } catch (e) { /* ignore */ }
+      state.coverCache = {};
+    }
+    function persistCoverCache() {
+      try {
+        var keys = Object.keys(state.coverCache);
+        if (keys.length > COVER_CACHE_MAX) {
+          /* descarta los más antiguos (orden de inserción) */
+          var toDrop = keys.length - COVER_CACHE_MAX;
+          for (var i = 0; i < toDrop; i++) delete state.coverCache[keys[i]];
+        }
+        localStorage.setItem(COVER_CACHE_KEY, JSON.stringify(state.coverCache));
+      } catch (e) { /* quota exceeded, ignore */ }
+    }
+
+    /* ---------- covers.json estático (opcional) ---------- */
+    function loadStaticCovers(callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'covers.json', true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState !== 4) return;
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            if (data && typeof data === 'object' && !Array.isArray(data)) {
+              state.covers = data;
+            }
+          } catch (e) { /* ignore */ }
+        }
+        callback();
+      };
+      xhr.onerror = function() { callback(); };
+      xhr.send();
+    }
+
+    /* ---------- Resolución de portada (sync) ---------- */
+    function resolveCover(game) {
+      /* 1. Campos del propio JSON */
+      var fields = [game.cover_url, game.cover, game.image, game.artwork];
+      var i, v;
+      for (i = 0; i < fields.length; i++) {
+        v = fields[i];
+        if (typeof v === 'string' && v.trim()) {
+          v = v.trim();
+          if (isValidHttpUrl(v)) return v;
+          if (!/^[a-z][a-z0-9+.-]*:/i.test(v)) return v; /* ruta relativa */
+        }
+      }
+      /* 2. covers.json */
+      if (state.covers && typeof state.covers === 'object') {
+        var keys = [game.name, String(game.name).toLowerCase(), slugify(game.name)];
+        for (i = 0; i < keys.length; i++) {
+          v = state.covers[keys[i]];
+          if (typeof v === 'string' && v.trim()) {
+            v = v.trim();
+            if (isValidHttpUrl(v) || !/^[a-z][a-z0-9+.-]*:/i.test(v)) return v;
+          }
+        }
+      }
+      /* 3. Caché RAWG */
+      if (state.coverCache[game.name]) return state.coverCache[game.name];
+      return null;
+    }
+
+    /* ---------- Cola de búsquedas RAWG ---------- */
+    function enqueueRawgSearch(name, callback) {
+      if (state.coverCache[name]) { callback(state.coverCache[name]); return; }
+      if (state.pendingCovers[name]) {
+        /* ya está en cola o buscándose — guarda el callback */
+        if (!state.pendingCovers[name + '_cbs']) state.pendingCovers[name + '_cbs'] = [];
+        state.pendingCovers[name + '_cbs'].push(callback);
+        return;
+      }
+      state.pendingCovers[name] = true;
+      state.pendingCovers[name + '_cbs'] = [callback];
+      state.rawQueue.push(name);
+      drainRawgQueue();
+    }
+    function drainRawgQueue() {
+      if (state.rawBusy || state.rawQueue.length === 0) return;
+      if (!RAWG_API_KEY || RAWG_API_KEY === 'TU_CLAVE_AQUI') {
+        /* sin clave: descarta toda la cola silenciosamente */
+        while (state.rawQueue.length) {
+          var n = state.rawQueue.shift();
+          finishPending(n, null);
+        }
+        return;
+      }
+      state.rawBusy = true;
+      var name = state.rawQueue.shift();
+
+      var rawgUrl = 'https://api.rawg.io/api/games?search=' +
+                    encodeURIComponent(name) +
+                    '&key=' + encodeURIComponent(RAWG_API_KEY) +
+                    '&page_size=1';
+      var proxied = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(rawgUrl);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', proxied, true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState !== 4) return;
+        var found = null;
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            var hit = data && data.results && data.results[0];
+            var img = hit && hit.background_image;
+            if (img && isValidHttpUrl(img)) found = img;
+          } catch (e) { /* ignore */ }
+        }
+        if (found) {
+          state.coverCache[name] = found;
+          persistCoverCache();
+        }
+        finishPending(name, found);
+
+        setTimeout(function() {
+          state.rawBusy = false;
+          drainRawgQueue();
+        }, RAW_SEARCH_DELAY);
+      };
+      xhr.onerror = function() {
+        finishPending(name, null);
+        setTimeout(function() {
+          state.rawBusy = false;
+          drainRawgQueue();
+        }, RAW_SEARCH_DELAY);
+      };
+      xhr.send();
+    }
+    function finishPending(name, result) {
+      delete state.pendingCovers[name];
+      var cbs = state.pendingCovers[name + '_cbs'] || [];
+      delete state.pendingCovers[name + '_cbs'];
+      for (var i = 0; i < cbs.length; i++) {
+        try { cbs[i](result); } catch (e) { /* ignore */ }
+      }
     }
 
     /* ---------- Favorites ---------- */
@@ -497,7 +596,7 @@
       }
     }
 
-    /* ---------- Load data ---------- */
+    /* ---------- Load games ---------- */
     function loadGames() {
       var xhr = new XMLHttpRequest();
       xhr.open('GET', 'ps4_games_expanded.json', true);
@@ -526,11 +625,10 @@
       };
       xhr.send();
     }
-
     function processGames(data) {
-      var games = [];
-      for (var i = 0; i < data.length; i++) {
-        var g = data[i];
+      var games = [], i, g;
+      for (i = 0; i < data.length; i++) {
+        g = data[i];
         if (!g || typeof g !== 'object') continue;
         if (typeof g.name !== 'string' || !g.name.trim()) continue;
         g._id = 'g' + i;
@@ -541,11 +639,11 @@
       games.sort(function(a, b) { return compareNames(a.name, b.name); });
       state.games = games;
       state.gamesById = {};
-      for (var j = 0; j < games.length; j++) state.gamesById[games[j]._id] = games[j];
+      for (i = 0; i < games.length; i++) state.gamesById[games[i]._id] = games[i];
 
       var counts = {};
-      for (var k = 0; k < games.length; k++) {
-        counts[games[k]._letter] = (counts[games[k]._letter] || 0) + 1;
+      for (i = 0; i < games.length; i++) {
+        counts[games[i]._letter] = (counts[games[i]._letter] || 0) + 1;
       }
       var letters = Object.keys(counts).sort(function(a, b) {
         if (a === '#') return -1;
@@ -571,14 +669,14 @@
       render();
     }
     function setActiveNav(route) {
-      var items = navEl.querySelectorAll('.nav-item');
-      for (var i = 0; i < items.length; i++) {
+      var items = navEl.querySelectorAll('.nav-item'), i;
+      for (i = 0; i < items.length; i++) {
         if (items[i].getAttribute('data-route') === route) items[i].classList.add('active');
         else items[i].classList.remove('active');
       }
     }
 
-    /* ---------- Render root ---------- */
+    /* ---------- Root render ---------- */
     function render() {
       if (!state.loaded) {
         viewEl.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading library…</p></div>';
@@ -614,8 +712,8 @@
     function renderHome() {
       viewEl.innerHTML = '';
       var featured = pickFeatured();
-      var totalLinks = 0;
-      for (var i = 0; i < state.games.length; i++) totalLinks += getTotalLinks(state.games[i]);
+      var totalLinks = 0, i;
+      for (i = 0; i < state.games.length; i++) totalLinks += getTotalLinks(state.games[i]);
 
       if (featured) {
         var hero = el('div', 'hero');
@@ -626,14 +724,12 @@
         content.appendChild(el('div', 'hero-label', 'Featured Game'));
         content.appendChild(el('h2', 'hero-title', featured.name));
         var n = getTotalLinks(featured);
-        content.appendChild(el('div', 'hero-meta',
-          n + ' download link' + (n !== 1 ? 's' : '') + ' available'));
+        content.appendChild(el('div', 'hero-meta', n + ' download link' + (n !== 1 ? 's' : '') + ' available'));
         var acts = el('div', 'hero-actions');
         var vb = el('a', 'btn btn-primary', 'View Game');
         vb.href = '#/game/' + featured._id;
         acts.appendChild(vb);
-        var fb = el('button', 'btn btn-secondary',
-          isFavorite(featured._id) ? '★ Favorited' : '☆ Add to Favorites');
+        var fb = el('button', 'btn btn-secondary', isFavorite(featured._id) ? '★ Favorited' : '☆ Add to Favorites');
         fb.type = 'button';
         fb.onclick = function() { toggleFavorite(featured._id); renderHome(); };
         acts.appendChild(fb);
@@ -656,14 +752,13 @@
       allBtn.href = '#/library';
       s1h.appendChild(allBtn);
       s1.appendChild(s1h);
-      var lg = el('div', 'letter-grid');
-      for (var L = 0; L < state.letters.length; L++) {
+      var lg = el('div', 'letter-grid'), L;
+      for (L = 0; L < state.letters.length; L++) {
         (function(item) {
           var c = el('button', 'letter-card');
           c.type = 'button';
           c.appendChild(el('div', 'letter-card-letter', item.letter));
-          c.appendChild(el('div', 'letter-card-count',
-            formatNumber(item.count) + ' game' + (item.count !== 1 ? 's' : '')));
+          c.appendChild(el('div', 'letter-card-count', formatNumber(item.count) + ' game' + (item.count !== 1 ? 's' : '')));
           c.onclick = function() {
             state.lib.letter = item.letter; state.lib.page = 1;
             window.location.hash = '#/library';
@@ -684,14 +779,13 @@
         s2.appendChild(createGameGrid(pop));
         viewEl.appendChild(s2);
       }
-      viewEl.appendChild(el('div', 'view-subtitle',
-        'NEXORA · ' + formatNumber(state.games.length) + ' games in the library'));
+      viewEl.appendChild(el('div', 'view-subtitle', 'NEXORA · ' + formatNumber(state.games.length) + ' games in the library'));
     }
     function pickFeatured() {
       if (state.games.length === 0) return null;
-      var best = state.games[0], bl = getTotalLinks(best);
-      for (var i = 1; i < state.games.length; i++) {
-        var n = getTotalLinks(state.games[i]);
+      var best = state.games[0], bl = getTotalLinks(best), i, n;
+      for (i = 1; i < state.games.length; i++) {
+        n = getTotalLinks(state.games[i]);
         if (n > bl) { best = state.games[i]; bl = n; }
       }
       return best;
@@ -707,8 +801,7 @@
     function renderLibrary() {
       viewEl.innerHTML = '';
       viewEl.appendChild(el('h1', 'view-title', 'Library'));
-      viewEl.appendChild(el('p', 'view-subtitle',
-        'Browse and search the complete game catalog.'));
+      viewEl.appendChild(el('p', 'view-subtitle', 'Browse and search the complete game catalog.'));
 
       var sw = el('div', 'search-wrap');
       sw.appendChild(el('span', 'search-icon', '⌕'));
@@ -734,7 +827,8 @@
       allChip.type = 'button';
       allChip.onclick = function() { state.lib.letter = ''; state.lib.page = 1; renderLibrary(); };
       fb.appendChild(allChip);
-      for (var i = 0; i < state.letters.length; i++) {
+      var i;
+      for (i = 0; i < state.letters.length; i++) {
         (function(it) {
           var c = el('button', 'chip' + (state.lib.letter === it.letter ? ' active' : ''), it.letter);
           c.type = 'button';
@@ -755,10 +849,10 @@
         { v: 'az', l: 'A → Z' }, { v: 'za', l: 'Z → A' },
         { v: 'links_desc', l: 'Most links' }, { v: 'links_asc', l: 'Fewest links' }
       ];
-      for (var s = 0; s < opts.length; s++) {
+      for (i = 0; i < opts.length; i++) {
         var o = document.createElement('option');
-        o.value = opts[s].v; o.textContent = opts[s].l;
-        if (state.lib.sort === opts[s].v) o.selected = true;
+        o.value = opts[i].v; o.textContent = opts[i].l;
+        if (state.lib.sort === opts[i].v) o.selected = true;
         sel.appendChild(o);
       }
       sel.onchange = function() {
@@ -778,9 +872,9 @@
       renderLibraryResultsOnly();
     }
     function getFilteredLibrary() {
-      var q = state.lib.query.toUpperCase(), L = state.lib.letter, out = [];
-      for (var i = 0; i < state.games.length; i++) {
-        var g = state.games[i];
+      var q = state.lib.query.toUpperCase(), L = state.lib.letter, out = [], i, g;
+      for (i = 0; i < state.games.length; i++) {
+        g = state.games[i];
         if (L && g._letter !== L) continue;
         if (q && g.name.toUpperCase().indexOf(q) === -1) continue;
         out.push(g);
@@ -823,11 +917,10 @@
     function renderFavorites() {
       viewEl.innerHTML = '';
       viewEl.appendChild(el('h1', 'view-title', 'Favorites'));
-      viewEl.appendChild(el('p', 'view-subtitle',
-        'Your saved games are stored locally in this browser.'));
-      var favs = [];
-      for (var i = 0; i < state.favorites.length; i++) {
-        var g = state.gamesById[state.favorites[i]];
+      viewEl.appendChild(el('p', 'view-subtitle', 'Your saved games are stored locally in this browser.'));
+      var favs = [], i, g;
+      for (i = 0; i < state.favorites.length; i++) {
+        g = state.gamesById[state.favorites[i]];
         if (g) favs.push(g);
       }
       if (favs.length === 0) {
@@ -846,16 +939,14 @@
     function renderCategories() {
       viewEl.innerHTML = '';
       viewEl.appendChild(el('h1', 'view-title', 'Categories'));
-      viewEl.appendChild(el('p', 'view-subtitle',
-        'Browse the library by the first letter of each game.'));
-      var g = el('div', 'letter-grid');
-      for (var i = 0; i < state.letters.length; i++) {
+      viewEl.appendChild(el('p', 'view-subtitle', 'Browse the library by the first letter of each game.'));
+      var g = el('div', 'letter-grid'), i;
+      for (i = 0; i < state.letters.length; i++) {
         (function(it) {
           var c = el('button', 'letter-card');
           c.type = 'button';
           c.appendChild(el('div', 'letter-card-letter', it.letter));
-          c.appendChild(el('div', 'letter-card-count',
-            formatNumber(it.count) + ' game' + (it.count !== 1 ? 's' : '')));
+          c.appendChild(el('div', 'letter-card-count', formatNumber(it.count) + ' game' + (it.count !== 1 ? 's' : '')));
           c.onclick = function() {
             state.lib.letter = it.letter; state.lib.page = 1;
             window.location.hash = '#/library';
@@ -916,12 +1007,13 @@
         a.textContent = label;
         dg.appendChild(a); hasLinks = true;
       }
-      if (Array.isArray(dl.mediafire)) for (var i = 0; i < dl.mediafire.length; i++)
+      var i;
+      if (Array.isArray(dl.mediafire)) for (i = 0; i < dl.mediafire.length; i++)
         addLink(dl.mediafire[i], 'btn-mediafire', 'Mediafire ' + (i + 1), 'mediafire');
-      if (Array.isArray(dl['1file'])) for (var j = 0; j < dl['1file'].length; j++)
-        addLink(dl['1file'][j], 'btn-1file', '1File ' + (j + 1), '1file');
-      if (Array.isArray(dl.other)) for (var k = 0; k < dl.other.length; k++)
-        addLink(dl.other[k], 'btn-other', 'Mirror ' + (k + 1), 'other');
+      if (Array.isArray(dl['1file'])) for (i = 0; i < dl['1file'].length; i++)
+        addLink(dl['1file'][i], 'btn-1file', '1File ' + (i + 1), '1file');
+      if (Array.isArray(dl.other)) for (i = 0; i < dl.other.length; i++)
+        addLink(dl.other[i], 'btn-other', 'Mirror ' + (i + 1), 'other');
       if (hasLinks) { dls.appendChild(dg); info.appendChild(dls); }
 
       if (isValidHttpUrl(game.page_url)) {
@@ -941,57 +1033,69 @@
     function renderAbout() {
       viewEl.innerHTML = '';
       viewEl.appendChild(el('h1', 'view-title', 'About NEXORA'));
-      viewEl.appendChild(el('p', 'view-subtitle',
-        'A lightweight games library interface optimized for the PlayStation 4 browser.'));
+      viewEl.appendChild(el('p', 'view-subtitle', 'A lightweight games library interface optimized for the PlayStation 4 browser.'));
 
-      var tl = 0;
-      for (var i = 0; i < state.games.length; i++) tl += getTotalLinks(state.games[i]);
+      var tl = 0, i;
+      for (i = 0; i < state.games.length; i++) tl += getTotalLinks(state.games[i]);
       var st = el('div', 'stats-row');
       st.appendChild(createStat(formatNumber(state.games.length), 'Games'));
       st.appendChild(createStat(formatNumber(tl), 'Links'));
       st.appendChild(createStat(formatNumber(state.favorites.length), 'Favorites'));
-      st.appendChild(createStat('v1.0', 'Version'));
+      st.appendChild(createStat('v1.2', 'Version'));
       viewEl.appendChild(st);
 
       var a = el('div', 'section');
-      a.appendChild(el('h3', 'section-title', 'Design & Tech'));
-      var t = el('div');
-      t.style.marginTop = '16px'; t.style.color = 'var(--muted)';
-      t.style.fontSize = '15px'; t.style.lineHeight = '1.7';
-      t.innerHTML =
-        '<p>NEXORA is built with vanilla HTML, CSS and JavaScript.</p>' +
-        '<p style="margin-top:10px;">No frameworks, no external dependencies, no tracking.</p>' +
-        '<p style="margin-top:10px;">Designed for compatibility with the PS4 system browser ' +
-        'and controller navigation.</p>';
-      a.appendChild(t); viewEl.appendChild(a);
+      a.appendChild(el('h3', 'section-title', 'Covers'));
+      var info = el('div');
+      info.style.marginTop = '16px'; info.style.color = 'var(--muted)';
+      info.style.fontSize = '14px'; info.style.lineHeight = '1.7';
+      var cached = 0;
+      for (var k in state.coverCache) if (state.coverCache.hasOwnProperty(k)) cached++;
+      var hasKey = RAWG_API_KEY && RAWG_API_KEY !== 'TU_CLAVE_AQUI';
+      info.innerHTML =
+        '<p>Automatic cover lookup: <strong>' + (hasKey ? 'enabled' : 'disabled (missing API key)') + '</strong></p>' +
+        '<p>Covers cached in this browser: <strong>' + formatNumber(cached) + '</strong></p>' +
+        '<p style="margin-top:10px;">Portrait artwork is resolved in this order:</p>' +
+        '<ol style="margin:10px 0 0 20px; line-height:1.8;">' +
+        '<li><code>cover_url</code> / <code>cover</code> / <code>image</code> in the game entry.</li>' +
+        '<li>Optional <code>covers.json</code> mapping.</li>' +
+        '<li>RAWG.io auto-search (requires a free API key in <code>RAWG_API_KEY</code>).</li>' +
+        '<li>Deterministic colored placeholder with the initial.</li>' +
+        '</ol>';
+      a.appendChild(info); viewEl.appendChild(a);
 
       var s = el('div', 'section');
       s.appendChild(el('h3', 'section-title', 'Settings'));
+      var row = el('div');
+      row.style.marginTop = '16px'; row.style.display = 'flex';
+      row.style.gap = '12px'; row.style.flexWrap = 'wrap';
+
       var cb = el('button', 'btn btn-danger', 'Clear all favorites');
-      cb.type = 'button'; cb.style.marginTop = '16px';
+      cb.type = 'button';
       cb.onclick = function() {
         if (window.confirm('Remove all favorites? This cannot be undone.')) {
           state.favorites = []; saveFavorites(); updateFavBadge(); renderAbout();
         }
       };
-      s.appendChild(cb); viewEl.appendChild(s);
+      row.appendChild(cb);
 
-      var n = el('div', 'section');
-      n.appendChild(el('h3', 'section-title', 'Legal Notice'));
-      var p = el('p');
-      p.style.marginTop = '16px'; p.style.color = 'var(--muted)';
-      p.style.fontSize = '14px'; p.style.lineHeight = '1.7';
-      p.textContent =
-        'NEXORA is a front-end interface for browsing a game catalog. ' +
-        'It does not host any files. Users are responsible for ensuring that ' +
-        'any content they access through third-party links is properly licensed.';
-      n.appendChild(p); viewEl.appendChild(n);
+      var cc2 = el('button', 'btn btn-danger', 'Clear cover cache');
+      cc2.type = 'button';
+      cc2.onclick = function() {
+        if (window.confirm('Clear cached cover URLs? They will be looked up again.')) {
+          state.coverCache = {};
+          try { localStorage.removeItem(COVER_CACHE_KEY); } catch (e) {}
+          renderAbout();
+        }
+      };
+      row.appendChild(cc2);
+      s.appendChild(row); viewEl.appendChild(s);
     }
 
-    /* ---------- Shared components ---------- */
+    /* ---------- Components ---------- */
     function createGameGrid(games) {
-      var g = el('div', 'game-grid');
-      for (var i = 0; i < games.length; i++) g.appendChild(createGameCard(games[i]));
+      var g = el('div', 'game-grid'), i;
+      for (i = 0; i < games.length; i++) g.appendChild(createGameCard(games[i]));
       return g;
     }
     function createGameCard(game) {
@@ -1029,27 +1133,82 @@
       card.appendChild(fb);
       return card;
     }
+
+    /* ---------- Cover rendering with auto-lookup ---------- */
     function createCover(game) {
       var wrap = el('div', 'cover-wrap');
-      var url = getExternalCoverUrl(game);
+      var url = resolveCover(game);
+
       if (url) {
+        /* Portada ya conocida (JSON, covers.json o caché) */
         var ph = buildPlaceholder(game);
         ph.style.display = 'none';
         var img = document.createElement('img');
         img.className = 'cover-img';
-        img.src = url; img.alt = ''; img.setAttribute('loading', 'lazy');
-        img.onerror = function() { img.style.display = 'none'; ph.style.display = 'flex'; };
-        wrap.appendChild(ph); wrap.appendChild(img);
-      } else {
-        wrap.appendChild(buildPlaceholder(game));
+        img.src = url;
+        img.alt = '';
+        img.setAttribute('loading', 'lazy');
+        img.onerror = function() {
+          img.style.display = 'none';
+          ph.style.display = 'flex';
+          /* si falla la URL cacheada, la olvidamos para intentar de nuevo la próxima vez */
+          if (state.coverCache[game.name] === url) {
+            delete state.coverCache[game.name];
+            persistCoverCache();
+          }
+        };
+        wrap.appendChild(ph);
+        wrap.appendChild(img);
+        return wrap;
       }
+
+      /* Sin portada conocida → placeholder + búsqueda en segundo plano */
+      var placeholder = buildPlaceholder(game);
+      wrap.appendChild(placeholder);
+
+      enqueueRawgSearch(game.name, function(foundUrl) {
+        if (!foundUrl) return;
+        var img2 = document.createElement('img');
+        img2.className = 'cover-img';
+        img2.src = foundUrl;
+        img2.alt = '';
+        img2.setAttribute('loading', 'lazy');
+        img2.onerror = function() {
+          img2.style.display = 'none';
+          placeholder.style.display = 'flex';
+          if (state.coverCache[game.name] === foundUrl) {
+            delete state.coverCache[game.name];
+            persistCoverCache();
+          }
+        };
+        placeholder.style.display = 'none';
+        wrap.appendChild(img2);
+      });
+
       return wrap;
     }
+
     function buildPlaceholder(game) {
       var p = el('div', 'cover-placeholder');
-      p.appendChild(el('span', 'cover-letter', game._letter === '#' ? '?' : game._letter));
+      var h = hashCode(game.name);
+      var hue = h % 360;
+      var hue2 = (hue + 45 + (h % 60)) % 360;
+      p.style.background =
+        'linear-gradient(135deg, hsl(' + hue + ', 42%, 20%) 0%, ' +
+        'hsl(' + hue2 + ', 32%, 11%) 100%)';
+
+      var letterTxt = game._letter === '#' ? (game.name.charAt(0) || '?') : game._letter;
+      var letter = el('span', 'cover-letter', letterTxt);
+      letter.style.color = 'hsla(' + hue + ', 80%, 78%, 0.92)';
+      letter.style.textShadow = '0 2px 20px hsla(' + hue + ', 90%, 50%, 0.35)';
+      p.appendChild(letter);
+
+      var nm = el('div', 'cover-name-small', game.name);
+      nm.style.color = 'hsla(' + hue + ', 40%, 88%, 0.75)';
+      p.appendChild(nm);
       return p;
     }
+
     function createPagination(current, total, onPage) {
       var nav = el('nav', 'pagination');
       nav.setAttribute('aria-label', 'Pagination');
@@ -1064,18 +1223,18 @@
         nav.appendChild(b);
       }
       addBtn('‹', current - 1, { disabled: current === 1, ariaLabel: 'Previous page' });
-      var pages = [];
-      if (total <= 7) { for (var i = 1; i <= total; i++) pages.push(i); }
+      var pages = [], i;
+      if (total <= 7) { for (i = 1; i <= total; i++) pages.push(i); }
       else {
         pages.push(1);
         var s = Math.max(2, current - 1), e = Math.min(total - 1, current + 1);
         if (s > 2) pages.push('...');
-        for (var j = s; j <= e; j++) pages.push(j);
+        for (i = s; i <= e; i++) pages.push(i);
         if (e < total - 1) pages.push('...');
         pages.push(total);
       }
-      for (var k = 0; k < pages.length; k++) {
-        var p = pages[k];
+      for (i = 0; i < pages.length; i++) {
+        var p = pages[i];
         if (p === '...') nav.appendChild(el('span', 'page-ellipsis', '…'));
         else addBtn(String(p), p, { active: p === current });
       }
@@ -1085,11 +1244,16 @@
 
     /* ---------- Init ---------- */
     function init() {
-      loadFavorites(); updateFavBadge();
+      loadFavorites();
+      loadCoverCache();
+      updateFavBadge();
       if (!window.location.hash) window.location.hash = '#/home';
       window.addEventListener('hashchange', navigate, false);
-      navigate();
-      loadGames();
+      /* Covers estáticas opcionales primero, luego la DB */
+      loadStaticCovers(function() {
+        navigate();
+        loadGames();
+      });
     }
     if (document.readyState === 'loading')
       document.addEventListener('DOMContentLoaded', init, false);
