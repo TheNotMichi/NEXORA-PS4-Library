@@ -1,860 +1,1100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Complete database of PS4 games with download links from Mediafire, 1File, and more.">
-    <title>PS4 Games Database - Complete Catalog</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            -webkit-font-smoothing: antialiased;
-        }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        header {
-            background: linear-gradient(135deg, #003791 0%, #0066cc 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-            border-radius: 15px 15px 0 0;
-        }
-        h1 { font-size: 3em; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
-        .stats {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-        }
-        .stat-item { text-align: center; }
-        .stat-number { font-size: 2em; font-weight: bold; display: block; font-variant-numeric: tabular-nums; }
-        .stat-label { font-size: 0.9em; opacity: 0.9; margin-top: 5px; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NEXORA — A premium PS4 games library, optimized for the PlayStation 4 browser.">
+  <title>NEXORA — Premium Games Library</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .search-container { padding: 30px; background: #f8f9fa; border-bottom: 2px solid #e9ecef; }
-        #searchInput {
-            width: 100%;
-            padding: 18px 25px;
-            font-size: 18px;
-            border: 2px solid #003791;
-            border-radius: 50px;
-            outline: none;
-            transition: box-shadow 0.2s, border-color 0.2s;
-            font-family: inherit;
-        }
-        #searchInput:focus {
-            border-color: #0066cc;
-            box-shadow: 0 0 0 4px rgba(0, 55, 145, 0.15);
-        }
-        .search-info { margin-top: 15px; text-align: center; color: #555; font-size: 14px; min-height: 20px; }
+    :root {
+      --bg: #0D0B14;
+      --sidebar: #13101D;
+      --card: #191426;
+      --card-hover: #221a33;
+      --primary: #8052E8;
+      --primary-hover: #9468f0;
+      --primary-dim: rgba(128, 82, 232, 0.15);
+      --secondary: #B9A0FF;
+      --text: #F5F2FA;
+      --muted: #A49BB5;
+      --border: #2a2340;
+      --danger: #e85a5a;
+    }
 
-        /* Sticky letter nav (horizontal scroll, no wrap) */
-        .letter-nav {
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 6px;
-            padding: 12px 30px;
-            background: white;
-            border-bottom: 1px solid #e9ecef;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: thin;
-        }
-        .letter-chip {
-            flex-shrink: 0;
-            min-width: 38px;
-            padding: 6px 12px;
-            border: 1px solid #d0d7de;
-            background: white;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.15s, color 0.15s, border-color 0.15s;
-            color: #333;
-            font-family: inherit;
-        }
-        .letter-chip:hover:not(.active) { background: #e3f2fd; border-color: #003791; color: #003791; }
-        .letter-chip.active { background: #003791; color: white; border-color: #003791; }
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+    }
+    body { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font-family: inherit; }
 
-        .active-filters {
-            display: none;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 10px 30px;
-            background: #fff8e1;
-            border-bottom: 1px solid #ffe082;
-            font-size: 14px;
-            color: #795548;
-        }
-        .active-filters.show { display: flex; }
-        .filter-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            background: white;
-            border: 1px solid #ffb300;
-            border-radius: 20px;
-            font-size: 13px;
-        }
-        .filter-tag button {
-            border: none; background: none; cursor: pointer;
-            color: #795548; font-size: 16px; line-height: 1; padding: 0;
-        }
-        .filter-tag button:hover { color: #d32f2f; }
-        .clear-filters {
-            padding: 4px 10px;
-            border: 1px solid #fb8c00;
-            background: white;
-            color: #e65100;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 500;
-            font-family: inherit;
-        }
-        .clear-filters:hover { background: #fb8c00; color: white; }
+    a:focus, button:focus, input:focus, select:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+    a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
 
-        .games-container { padding: 24px 30px; min-height: 300px; }
-        .game-item {
-            padding: 18px 20px;
-            margin: 10px 0;
-            border-radius: 10px;
-            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
-            border-left: 5px solid transparent;
-            background: #f8f9fa;
-        }
-        .game-item:hover {
-            background: #e3f2fd;
-            border-left-color: #003791;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        .game-title {
-            font-size: 17px;
-            font-weight: 600;
-            color: #003791;
-            margin-bottom: 10px;
-            line-height: 1.3;
-            word-break: break-word;
-        }
-        .download-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-        .download-btn {
-            padding: 7px 14px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            transition: background 0.2s, transform 0.2s;
-            display: inline-block;
-        }
-        .btn-mediafire { background: #1e88e5; color: white; }
-        .btn-mediafire:hover { background: #1565c0; transform: translateY(-2px); }
-        .btn-1file { background: #43a047; color: white; }
-        .btn-1file:hover { background: #2e7d32; transform: translateY(-2px); }
-        .btn-other { background: #fb8c00; color: white; }
-        .btn-other:hover { background: #e65100; transform: translateY(-2px); }
-        .btn-page { background: #6c757d; color: white; }
-        .btn-page:hover { background: #495057; transform: translateY(-2px); }
-        .link-count { font-size: 12px; color: #666; margin-top: 8px; }
+    .app { display: flex; height: 100vh; height: 100%; }
 
-        .pagination {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            padding: 20px 30px;
-            border-top: 1px solid #e9ecef;
-            background: #fafbfc;
-        }
-        .page-btn {
-            min-width: 40px;
-            height: 40px;
-            padding: 0 12px;
-            border: 1px solid #d0d7de;
-            background: white;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.15s, color 0.15s, border-color 0.15s;
-            color: #333;
-            font-family: inherit;
-        }
-        .page-btn:hover:not(:disabled):not(.active) { background: #e3f2fd; border-color: #003791; color: #003791; }
-        .page-btn.active { background: #003791; color: white; border-color: #003791; cursor: default; }
-        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-        .page-ellipsis { padding: 0 4px; color: #666; user-select: none; }
+    /* ===== Sidebar ===== */
+    .sidebar {
+      width: 260px; flex-shrink: 0;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      padding: 24px 16px 16px;
+      overflow-y: auto;
+    }
+    .logo {
+      font-size: 22px; font-weight: 800; letter-spacing: 3px;
+      padding: 8px 12px 24px; border-bottom: 1px solid var(--border);
+      margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+    }
+    .logo-mark { color: var(--primary); font-size: 24px; }
+    .nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px; border-radius: 10px;
+      color: var(--muted); font-size: 16px; font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+      cursor: pointer; border: none; background: none;
+      text-align: left; width: 100%;
+    }
+    .nav-item:hover { background: var(--primary-dim); color: var(--text); }
+    .nav-item.active { background: var(--primary-dim); color: var(--text); font-weight: 600; }
+    .nav-badge {
+      margin-left: auto; font-size: 12px; padding: 2px 8px;
+      background: var(--primary-dim); color: var(--secondary);
+      border-radius: 10px; font-weight: 600;
+    }
+    .sidebar-footer {
+      padding-top: 16px; border-top: 1px solid var(--border);
+      margin-top: 16px; font-size: 13px; color: var(--muted);
+    }
 
-        footer {
-            background: #f8f9fa;
-            padding: 25px;
-            text-align: center;
-            color: #666;
-            border-top: 2px solid #e9ecef;
-            font-size: 14px;
-            line-height: 1.6;
-            border-radius: 0 0 15px 15px;
-        }
-        footer a { color: #003791; text-decoration: none; font-weight: 500; }
-        footer a:hover { text-decoration: underline; }
+    /* ===== Main ===== */
+    .main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 32px 40px 64px; }
 
-        .scroll-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #003791;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border: none;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: background 0.2s, transform 0.2s;
-            font-size: 22px;
-            font-family: inherit;
-            z-index: 100;
-        }
-        .scroll-top:hover { background: #0066cc; transform: scale(1.08); }
-        .scroll-top.show { display: flex; }
+    @media (max-width: 1100px) { .main { padding: 24px 24px 48px; } }
+    @media (max-width: 800px) {
+      .app { flex-direction: column; }
+      .sidebar {
+        width: 100%; flex-direction: row; align-items: center;
+        padding: 12px 16px; border-right: none;
+        border-bottom: 1px solid var(--border);
+        overflow-x: auto; overflow-y: hidden;
+      }
+      .logo {
+        padding: 0 16px 0 0; border-bottom: none;
+        border-right: 1px solid var(--border);
+        margin-bottom: 0; flex-shrink: 0;
+      }
+      .nav { flex-direction: row; gap: 4px; flex: none; }
+      .nav-item { padding: 10px 14px; white-space: nowrap; font-size: 15px; }
+      .sidebar-footer { display: none; }
+      .main { padding: 20px 16px 40px; }
+    }
 
-        .loading, .empty-state, .error-state {
-            text-align: center;
-            padding: 60px 20px;
-            font-size: 16px;
-            color: #666;
-        }
-        .spinner {
-            width: 40px;
-            height: 40px;
-            margin: 0 auto 16px;
-            border: 4px solid #e9ecef;
-            border-top-color: #003791;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .error-state .error-detail {
-            color: #d32f2f;
-            font-size: 13px;
-            margin: 10px 0 20px;
-            font-family: 'Consolas', 'Monaco', monospace;
-            word-break: break-word;
-        }
-        .retry-btn {
-            padding: 10px 22px;
-            background: #003791;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-        }
-        .retry-btn:hover { background: #0066cc; }
+    /* ===== Typography ===== */
+    .view-title { font-size: 32px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; }
+    .view-subtitle { font-size: 15px; color: var(--muted); margin-bottom: 28px; }
+    @media (max-width: 800px) { .view-title { font-size: 24px; } }
 
-        .sr-only {
-            position: absolute;
-            width: 1px; height: 1px;
-            padding: 0; margin: -1px;
-            overflow: hidden;
-            clip: rect(0,0,0,0);
-            white-space: nowrap;
-            border: 0;
-        }
+    /* ===== Hero ===== */
+    .hero {
+      background: linear-gradient(135deg, #1f1834 0%, #13101D 100%);
+      border: 1px solid var(--border); border-radius: 16px;
+      padding: 40px; margin-bottom: 32px;
+      display: flex; gap: 32px; align-items: center;
+    }
+    .hero-cover {
+      width: 200px; flex-shrink: 0; border-radius: 12px;
+      overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    }
+    .hero-cover .cover-wrap { border-radius: 12px; }
+    .hero-cover .cover-letter { font-size: 72px; }
+    .hero-content { flex: 1; min-width: 0; }
+    .hero-label {
+      font-size: 12px; text-transform: uppercase; letter-spacing: 2px;
+      color: var(--primary); font-weight: 700; margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: 36px; font-weight: 800; margin-bottom: 12px;
+      line-height: 1.15; word-break: break-word;
+    }
+    .hero-meta { color: var(--muted); font-size: 15px; margin-bottom: 24px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    @media (max-width: 800px) {
+      .hero { flex-direction: column; padding: 24px; gap: 20px; }
+      .hero-cover { width: 140px; }
+      .hero-title { font-size: 24px; }
+    }
 
-        :focus-visible { outline: 3px solid #ffb300; outline-offset: 2px; }
+    /* ===== Buttons ===== */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 48px; padding: 0 22px; border-radius: 10px;
+      font-size: 16px; font-weight: 600; cursor: pointer;
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: transparent; color: var(--text); border-color: var(--border); }
+    .btn-secondary:hover { background: var(--primary-dim); border-color: var(--primary); }
+    .btn-danger { background: transparent; color: var(--danger); border-color: rgba(232,90,90,0.4); }
+    .btn-danger:hover { background: rgba(232,90,90,0.1); }
 
-        @media (max-width: 768px) {
-            body { padding: 10px; }
-            h1 { font-size: 1.8em; }
-            .stat-number { font-size: 1.5em; }
-            header { padding: 24px 20px; }
-            .search-container { padding: 20px; }
-            #searchInput { font-size: 16px; padding: 14px 20px; }
-            .letter-nav { padding: 10px 16px; }
-            .games-container { padding: 16px; }
-            .game-title { font-size: 15px; }
-            .download-btn { padding: 6px 10px; font-size: 12px; }
-            .pagination { padding: 16px; gap: 4px; }
-            .page-btn { min-width: 36px; height: 36px; padding: 0 8px; font-size: 13px; }
-            .scroll-top { bottom: 16px; right: 16px; width: 44px; height: 44px; font-size: 18px; }
-        }
+    /* ===== Stats ===== */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 16px; margin-bottom: 40px;
+    }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px;
+    }
+    .stat-value { font-size: 28px; font-weight: 800; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+    .stat-label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+    @media (max-width: 800px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .stat-value { font-size: 22px; }
+    }
 
-        @media (prefers-reduced-motion: reduce) {
-            html { scroll-behavior: auto; }
-            .spinner { animation: none; border-color: #003791; }
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-            .download-btn:hover, .scroll-top:hover { transform: none; }
-        }
-    </style>
+    /* ===== Sections ===== */
+    .section { margin-bottom: 40px; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .section-title { font-size: 20px; font-weight: 700; }
+
+    /* ===== Search ===== */
+    .search-wrap { position: relative; margin-bottom: 16px; }
+    .search-input {
+      width: 100%; min-height: 52px; padding: 0 20px 0 52px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      color: var(--text); font-size: 16px; outline: none;
+      transition: border-color 0.15s;
+    }
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus { border-color: var(--primary); }
+    .search-icon {
+      position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+      color: var(--muted); pointer-events: none; font-size: 18px;
+    }
+
+    /* ===== Chips ===== */
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .chip {
+      min-height: 40px; padding: 0 16px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      color: var(--muted); font-size: 14px; font-weight: 500; cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .chip:hover { border-color: var(--primary); color: var(--text); }
+    .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* ===== Toolbar ===== */
+    .toolbar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+    .toolbar-group { display: flex; align-items: center; gap: 8px; }
+    .toolbar-label { font-size: 14px; color: var(--muted); font-weight: 500; }
+    .select {
+      min-height: 44px; padding: 0 36px 0 14px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      color: var(--text); font-size: 15px; cursor: pointer; outline: none;
+      -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23A49BB5' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center;
+    }
+    .select:focus { border-color: var(--primary); }
+
+    /* ===== Game grid ===== */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+    }
+    @media (max-width: 800px) {
+      .game-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+    }
+
+    .game-card {
+      position: relative;
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; transition: border-color 0.15s;
+    }
+    .game-card:hover { border-color: var(--primary); }
+    .game-card:hover .game-card-title { color: var(--secondary); }
+    .game-card-link { display: block; color: inherit; }
+    .game-card-link:focus { outline-offset: -2px; }
+
+    .cover-wrap { position: relative; padding-top: 133.33%; background: #1f1830; overflow: hidden; }
+    .cover-img, .cover-placeholder {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    }
+    .cover-img { object-fit: cover; display: block; }
+    .cover-placeholder {
+      background: linear-gradient(135deg, #2a1f4a 0%, #191426 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cover-letter {
+      font-size: 56px; font-weight: 800;
+      color: rgba(128, 82, 232, 0.55); user-select: none;
+    }
+    .hero-cover .cover-letter, .detail-cover .cover-letter { font-size: 96px; }
+
+    .game-card-info { padding: 12px 14px 16px; }
+    .game-card-title {
+      font-size: 15px; font-weight: 600; line-height: 1.35;
+      margin-bottom: 4px; word-break: break-word;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden; min-height: 40px;
+    }
+    .game-card-meta { font-size: 12px; color: var(--muted); }
+    .game-card-fav {
+      position: absolute; top: 8px; right: 8px;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(13, 11, 20, 0.85); border: 1px solid var(--border);
+      color: var(--muted); font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+      z-index: 2;
+    }
+    .game-card-fav:hover { color: var(--primary); border-color: var(--primary); }
+    .game-card-fav.active {
+      color: var(--primary); background: var(--primary-dim); border-color: var(--primary);
+    }
+
+    /* ===== Pagination ===== */
+    .pagination {
+      display: flex; justify-content: center; align-items: center;
+      gap: 6px; margin-top: 32px; flex-wrap: wrap;
+    }
+    .page-btn {
+      min-width: 44px; height: 44px; padding: 0 12px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); font-size: 15px; font-weight: 500; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .page-btn:hover:not(:disabled):not(.active) {
+      border-color: var(--primary); background: var(--primary-dim);
+    }
+    .page-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; cursor: default; }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .page-ellipsis { padding: 0 4px; color: var(--muted); user-select: none; }
+
+    /* ===== Detail ===== */
+    .detail { display: grid; grid-template-columns: 280px 1fr; gap: 40px; align-items: start; }
+    .detail-cover {
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+    }
+    .detail-cover .cover-wrap { border-radius: 16px; overflow: hidden; }
+    .detail-title {
+      font-size: 38px; font-weight: 800; line-height: 1.15;
+      margin-bottom: 12px; word-break: break-word; letter-spacing: -0.5px;
+    }
+    .detail-meta {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      margin-bottom: 24px; color: var(--muted); font-size: 14px;
+    }
+    .meta-pill {
+      padding: 6px 12px; background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; font-weight: 500; color: var(--text);
+    }
+    .detail-section { margin-top: 28px; padding-top: 28px; border-top: 1px solid var(--border); }
+    .detail-section-title {
+      font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--muted); margin-bottom: 14px; font-weight: 700;
+    }
+    .download-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px;
+    }
+    .download-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 48px; padding: 0 16px; border-radius: 10px;
+      font-size: 15px; font-weight: 600; transition: background 0.15s;
+      text-decoration: none;
+    }
+    .btn-mediafire { background: #1e88e5; color: #fff; }
+    .btn-mediafire:hover { background: #1565c0; }
+    .btn-1file { background: #43a047; color: #fff; }
+    .btn-1file:hover { background: #2e7d32; }
+    .btn-other { background: #fb8c00; color: #fff; }
+    .btn-other:hover { background: #e65100; }
+    .btn-page-link { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+    .btn-page-link:hover { border-color: var(--primary); }
+    @media (max-width: 800px) {
+      .detail { grid-template-columns: 1fr; gap: 24px; }
+      .detail-cover { max-width: 200px; margin: 0 auto; }
+      .detail-title { font-size: 26px; }
+    }
+
+    /* ===== Letters ===== */
+    .letter-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px;
+    }
+    .letter-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px 16px; text-align: center; cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      color: var(--text);
+    }
+    .letter-card:hover { border-color: var(--primary); background: var(--primary-dim); }
+    .letter-card-letter { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .letter-card-count { font-size: 13px; color: var(--muted); }
+
+    /* ===== States ===== */
+    .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+    .empty-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .empty-text { font-size: 15px; margin-bottom: 24px; }
+
+    .loading { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .spinner {
+      width: 40px; height: 40px; margin: 0 auto 16px;
+      border: 3px solid var(--border); border-top-color: var(--primary);
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error { text-align: center; padding: 60px 20px; max-width: 500px; margin: 0 auto; }
+    .error-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .error-text { font-size: 14px; color: var(--muted); margin-bottom: 24px; word-break: break-word; }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--muted); font-size: 15px; font-weight: 500;
+      margin-bottom: 24px; cursor: pointer; background: none; border: none; padding: 8px 0;
+    }
+    .back-link:hover { color: var(--text); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .spinner { animation: none; border-color: var(--primary); }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎮 PS4 Games Complete Database</h1>
-            <div class="stats">
-                <div class="stat-item">
-                    <span class="stat-number" id="totalGames">—</span>
-                    <span class="stat-label">Total Games</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="totalLinks">—</span>
-                    <span class="stat-label">Download Links</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="totalLetters">—</span>
-                    <span class="stat-label">Letters</span>
-                </div>
-            </div>
-        </header>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo"><span class="logo-mark">◆</span><span>NEXORA</span></div>
+      <nav class="nav" id="nav" aria-label="Main navigation">
+        <a href="#/home" class="nav-item" data-route="home">Home</a>
+        <a href="#/library" class="nav-item" data-route="library">Library</a>
+        <a href="#/favorites" class="nav-item" data-route="favorites">Favorites <span class="nav-badge" id="favBadge" style="display:none;">0</span></a>
+        <a href="#/categories" class="nav-item" data-route="categories">Categories</a>
+        <a href="#/about" class="nav-item" data-route="about">About</a>
+      </nav>
+      <div class="sidebar-footer">NEXORA · Games Library</div>
+    </aside>
+    <main class="main" id="main">
+      <div id="view">
+        <div class="loading"><div class="spinner"></div><p>Loading library…</p></div>
+      </div>
+    </main>
+  </div>
 
-        <div class="search-container">
-            <label for="searchInput" class="sr-only">Search games by name</label>
-            <input type="search" id="searchInput"
-                   placeholder="🔍 Search for games... (press / to focus)"
-                   autocomplete="off" spellcheck="false" aria-describedby="searchInfo">
-            <div class="search-info" id="searchInfo" role="status" aria-live="polite">Loading games database...</div>
-        </div>
+  <script>
+  (function() {
+    'use strict';
 
-        <nav class="letter-nav" id="letterNav" aria-label="Filter by first letter"></nav>
-        <div class="active-filters" id="activeFilters" aria-live="polite"></div>
+    var PAGE_SIZE = 48;
+    var FAV_KEY = 'nexora_favorites_v1';
 
-        <div class="games-container" id="gamesContainer">
-            <div class="loading">
-                <div class="spinner"></div>
-                <p>Loading games database...</p>
-            </div>
-        </div>
+    var state = {
+      games: [],
+      gamesById: {},
+      letters: [],
+      favorites: [],
+      loaded: false,
+      error: null,
+      route: '',
+      gameId: null,
+      lib: { query: '', letter: '', sort: 'az', page: 1 }
+    };
 
-        <nav class="pagination" id="pagination" aria-label="Pagination"></nav>
+    var viewEl = document.getElementById('view');
+    var navEl = document.getElementById('nav');
+    var favBadgeEl = document.getElementById('favBadge');
+    var mainEl = document.getElementById('main');
 
-        <footer>
-            <p><strong>PS4 Games Database</strong> — <span id="footerCount">Loading...</span></p>
-            <p>Sources: dlpsgame.com, romsfun.com, arabicps4games.github.io</p>
-            <p>Built with <a href="https://galaxy.ai/?via=start-building" target="_blank" rel="noopener noreferrer">Galaxy.ai</a></p>
-        </footer>
-    </div>
+    /* ---------- Utilities ---------- */
+    function getLetter(name) {
+      if (!name || typeof name !== 'string') return '#';
+      var c = name.charAt(0).toUpperCase();
+      return (c >= 'A' && c <= 'Z') ? c : '#';
+    }
+    function compareNames(a, b) {
+      var an = String(a).toLowerCase(), bn = String(b).toLowerCase();
+      return an < bn ? -1 : an > bn ? 1 : 0;
+    }
+    function formatNumber(n) {
+      n = Number(n) || 0;
+      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    function isValidHttpUrl(url) {
+      return typeof url === 'string' && /^https?:\/\//i.test(url);
+    }
+    function getTotalLinks(game) {
+      if (typeof game.total_links === 'number' && game.total_links >= 0) return game.total_links;
+      var dl = game.download_links || {}, n = 0;
+      if (Array.isArray(dl.mediafire)) n += dl.mediafire.length;
+      if (Array.isArray(dl['1file'])) n += dl['1file'].length;
+      if (Array.isArray(dl.other)) n += dl.other.length;
+      return n;
+    }
+    function buildRedirectUrl(link, name, host) {
+      return 'redirect-optimized.html?url=' + encodeURIComponent(String(link)) +
+             '&game=' + encodeURIComponent(String(name)) +
+             '&host=' + encodeURIComponent(String(host));
+    }
+    function getExternalCoverUrl(game) {
+      var cand = [game.cover_url, game.cover, game.image, game.artwork];
+      for (var i = 0; i < cand.length; i++) if (isValidHttpUrl(cand[i])) return cand[i];
+      return null;
+    }
+    function el(tag, cls, text) {
+      var n = document.createElement(tag);
+      if (cls) n.className = cls;
+      if (text !== undefined && text !== null) n.textContent = String(text);
+      return n;
+    }
 
-    <button class="scroll-top" id="scrollTop" type="button" aria-label="Scroll to top">↑</button>
+    /* ---------- Favorites ---------- */
+    function loadFavorites() {
+      try {
+        var raw = localStorage.getItem(FAV_KEY);
+        var p = raw ? JSON.parse(raw) : [];
+        state.favorites = Array.isArray(p) ? p : [];
+      } catch (e) { state.favorites = []; }
+    }
+    function saveFavorites() {
+      try { localStorage.setItem(FAV_KEY, JSON.stringify(state.favorites)); } catch (e) {}
+    }
+    function isFavorite(id) { return state.favorites.indexOf(id) !== -1; }
+    function toggleFavorite(id) {
+      var i = state.favorites.indexOf(id);
+      if (i === -1) state.favorites.push(id); else state.favorites.splice(i, 1);
+      saveFavorites(); updateFavBadge();
+    }
+    function updateFavBadge() {
+      if (state.favorites.length > 0) {
+        favBadgeEl.textContent = String(state.favorites.length);
+        favBadgeEl.style.display = '';
+      } else {
+        favBadgeEl.style.display = 'none';
+      }
+    }
 
-    <script>
-        // ============================================================
-        // CONFIG
-        // ============================================================
-        const PAGE_SIZE = 100;
-        const SEARCH_DEBOUNCE_MS = 250;
-
-        // ============================================================
-        // STATE
-        // ============================================================
-        let allGames = [];
-        let filteredGames = [];
-        let currentPage = 1;
-        let currentLetter = '';
-        let searchQuery = '';
-        let letterCounts = {};
-        let debounceTimer = null;
-
-        // ============================================================
-        // DOM REFS
-        // ============================================================
-        const el = {
-            searchInput: document.getElementById('searchInput'),
-            searchInfo: document.getElementById('searchInfo'),
-            gamesContainer: document.getElementById('gamesContainer'),
-            letterNav: document.getElementById('letterNav'),
-            activeFilters: document.getElementById('activeFilters'),
-            pagination: document.getElementById('pagination'),
-            totalGames: document.getElementById('totalGames'),
-            totalLinks: document.getElementById('totalLinks'),
-            totalLetters: document.getElementById('totalLetters'),
-            footerCount: document.getElementById('footerCount'),
-            scrollTopBtn: document.getElementById('scrollTop'),
-        };
-
-        // ============================================================
-        // HELPERS
-        // ============================================================
-        function computeLetter(name) {
-            if (!name || typeof name !== 'string') return '#';
-            const first = name.trim().charAt(0);
-            if (!first) return '#';
-            const upper = first.toUpperCase();
-            return /[A-Z]/.test(upper) ? upper : '#';
+    /* ---------- Load data ---------- */
+    function loadGames() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'ps4_games_expanded.json', true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState !== 4) return;
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            if (!Array.isArray(data)) throw new Error('Expected an array of games');
+            processGames(data);
+          } catch (e) {
+            state.error = 'Invalid database: ' + e.message;
+            state.loaded = true; render();
+          }
+        } else if (xhr.status === 0) {
+          state.error = 'Could not load ps4_games_expanded.json. Serve the site over HTTP and ensure the file exists.';
+          state.loaded = true; render();
+        } else {
+          state.error = 'HTTP ' + xhr.status + ' — could not load database.';
+          state.loaded = true; render();
         }
-
-        function getTotalLinks(game) {
-            if (typeof game.total_links === 'number' && game.total_links >= 0) {
-                return game.total_links;
-            }
-            const dl = game.download_links || {};
-            const mf = Array.isArray(dl.mediafire) ? dl.mediafire.length : 0;
-            const of = Array.isArray(dl['1file']) ? dl['1file'].length : 0;
-            const ot = Array.isArray(dl.other) ? dl.other.length : 0;
-            return mf + of + ot;
-        }
-
-        function isValidUrl(url) {
-            if (!url || typeof url !== 'string') return false;
-            try {
-                const u = new URL(url, window.location.href);
-                return u.protocol === 'http:' || u.protocol === 'https:';
-            } catch {
-                return false;
-            }
-        }
-
-        function buildRedirectUrl(link, gameName, host) {
-            const params = new URLSearchParams({
-                url: String(link),
-                game: String(gameName),
-                host: String(host),
-            });
-            return `redirect-optimized.html?${params.toString()}`;
-        }
-
-        function formatNumber(n) { return Number(n).toLocaleString('en-US'); }
-
-        // ============================================================
-        // LOAD
-        // ============================================================
-        async function loadGames() {
-            el.gamesContainer.innerHTML =
-                '<div class="loading"><div class="spinner"></div><p>Loading games database...</p></div>';
-            el.pagination.innerHTML = '';
-            el.letterNav.innerHTML = '';
-            el.activeFilters.classList.remove('show');
-            el.searchInfo.textContent = 'Loading games database...';
-
-            try {
-                const response = await fetch('ps4_games_expanded.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status} — ${response.statusText || 'could not load file'}`);
-                }
-                const data = await response.json();
-
-                if (!Array.isArray(data)) {
-                    throw new Error('Invalid JSON: expected an array of games');
-                }
-
-                allGames = data
-                    .filter(g => g && typeof g === 'object'
-                        && typeof g.name === 'string' && g.name.trim())
-                    .map(g => ({ ...g, name: g.name.trim(), letter: computeLetter(g.name) }));
-
-                if (allGames.length === 0) {
-                    throw new Error('Database is empty or has no valid games');
-                }
-
-                allGames.sort((a, b) =>
-                    a.name.localeCompare(b.name, 'en', { sensitivity: 'base', numeric: true })
-                );
-
-                letterCounts = {};
-                for (const g of allGames) {
-                    letterCounts[g.letter] = (letterCounts[g.letter] || 0) + 1;
-                }
-
-                const totalLinks = allGames.reduce((s, g) => s + getTotalLinks(g), 0);
-                const letters = Object.keys(letterCounts).length;
-                el.totalGames.textContent = formatNumber(allGames.length);
-                el.totalLinks.textContent = formatNumber(totalLinks);
-                el.totalLetters.textContent = letters;
-                el.footerCount.textContent =
-                    `${formatNumber(allGames.length)} games · ${formatNumber(totalLinks)} links`;
-
-                renderLetterNav();
-                applyFilters({ resetPage: true });
-
-            } catch (error) {
-                console.error('Error loading games:', error);
-                showError(error.message || 'Unknown error');
-            }
-        }
-
-        function showError(message) {
-            el.gamesContainer.innerHTML = '';
-            const wrap = document.createElement('div');
-            wrap.className = 'error-state';
-
-            const p = document.createElement('p');
-            p.textContent = 'Could not load the games database.';
-            wrap.appendChild(p);
-
-            const p2 = document.createElement('p');
-            p2.className = 'error-detail';
-            p2.textContent = message;
-            wrap.appendChild(p2);
-
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'retry-btn';
-            btn.textContent = 'Retry';
-            btn.addEventListener('click', loadGames);
-            wrap.appendChild(btn);
-
-            el.gamesContainer.appendChild(wrap);
-            el.searchInfo.textContent = 'Error loading games database';
-            el.pagination.innerHTML = '';
-        }
-
-        // ============================================================
-        // FILTERS
-        // ============================================================
-        function applyFilters({ resetPage = false } = {}) {
-            if (resetPage) currentPage = 1;
-
-            filteredGames = allGames;
-            if (currentLetter) filteredGames = filteredGames.filter(g => g.letter === currentLetter);
-            if (searchQuery) {
-                const q = searchQuery.toUpperCase();
-                filteredGames = filteredGames.filter(g => g.name.toUpperCase().includes(q));
-            }
-
-            const totalPages = Math.max(1, Math.ceil(filteredGames.length / PAGE_SIZE));
-            if (currentPage > totalPages) currentPage = totalPages;
-
-            updateSearchInfo();
-            updateActiveFilters();
-            renderLetterNavActiveState();
-            renderPage();
-        }
-
-        function updateSearchInfo() {
-            const shown = filteredGames.length;
-            const total = allGames.length;
-            el.searchInfo.textContent = (shown === total)
-                ? `Showing all ${formatNumber(total)} games`
-                : `Showing ${formatNumber(shown)} of ${formatNumber(total)} games`;
-        }
-
-        function updateActiveFilters() {
-            el.activeFilters.innerHTML = '';
-
-            if (!currentLetter && !searchQuery) {
-                el.activeFilters.classList.remove('show');
-                return;
-            }
-            el.activeFilters.classList.add('show');
-
-            if (currentLetter) {
-                const tag = document.createElement('span');
-                tag.className = 'filter-tag';
-                tag.textContent =
-                    `Letter: ${currentLetter} (${formatNumber(letterCounts[currentLetter] || 0)})`;
-                const x = document.createElement('button');
-                x.type = 'button';
-                x.textContent = '×';
-                x.setAttribute('aria-label', 'Remove letter filter');
-                x.addEventListener('click', () => setLetter(''));
-                tag.appendChild(x);
-                el.activeFilters.appendChild(tag);
-            }
-
-            if (searchQuery) {
-                const tag = document.createElement('span');
-                tag.className = 'filter-tag';
-                tag.textContent = `Search: "${searchQuery}"`;
-                const x = document.createElement('button');
-                x.type = 'button';
-                x.textContent = '×';
-                x.setAttribute('aria-label', 'Remove search');
-                x.addEventListener('click', () => {
-                    el.searchInput.value = '';
-                    setSearch('');
-                });
-                tag.appendChild(x);
-                el.activeFilters.appendChild(tag);
-            }
-
-            const clearBtn = document.createElement('button');
-            clearBtn.type = 'button';
-            clearBtn.className = 'clear-filters';
-            clearBtn.textContent = 'Clear all';
-            clearBtn.addEventListener('click', () => {
-                el.searchInput.value = '';
-                searchQuery = '';
-                currentLetter = '';
-                applyFilters({ resetPage: true });
-            });
-            el.activeFilters.appendChild(clearBtn);
-        }
-
-        // ============================================================
-        // LETTER NAV
-        // ============================================================
-        function renderLetterNav() {
-            el.letterNav.innerHTML = '';
-
-            const allBtn = document.createElement('button');
-            allBtn.type = 'button';
-            allBtn.className = 'letter-chip';
-            allBtn.dataset.letter = '';
-            allBtn.textContent = `All (${formatNumber(allGames.length)})`;
-            allBtn.addEventListener('click', () => setLetter(''));
-            el.letterNav.appendChild(allBtn);
-
-            const letters = Object.keys(letterCounts).sort((a, b) => {
-                if (a === '#') return -1;
-                if (b === '#') return 1;
-                return a.localeCompare(b);
-            });
-
-            for (const letter of letters) {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'letter-chip';
-                btn.dataset.letter = letter;
-                btn.textContent = letter;
-                btn.title = `${formatNumber(letterCounts[letter])} game${letterCounts[letter] !== 1 ? 's' : ''}`;
-                btn.setAttribute('aria-label',
-                    `Filter by ${letter} (${formatNumber(letterCounts[letter])} games)`);
-                btn.addEventListener('click', () => setLetter(letter));
-                el.letterNav.appendChild(btn);
-            }
-
-            renderLetterNavActiveState();
-        }
-
-        function renderLetterNavActiveState() {
-            el.letterNav.querySelectorAll('.letter-chip').forEach(chip => {
-                chip.classList.toggle('active', (chip.dataset.letter || '') === currentLetter);
-            });
-        }
-
-        function setLetter(letter) {
-            currentLetter = letter || '';
-            applyFilters({ resetPage: true });
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // ============================================================
-        // SEARCH
-        // ============================================================
-        function setSearch(value) {
-            searchQuery = value.trim();
-            applyFilters({ resetPage: true });
-        }
-
-        function onSearchInput(e) {
-            const value = e.target.value;
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => setSearch(value), SEARCH_DEBOUNCE_MS);
-        }
-
-        // ============================================================
-        // RENDER PAGE
-        // ============================================================
-        function renderPage() {
-            el.gamesContainer.innerHTML = '';
-
-            if (filteredGames.length === 0) {
-                const empty = document.createElement('div');
-                empty.className = 'empty-state';
-                empty.textContent = 'No games match your filters.';
-                el.gamesContainer.appendChild(empty);
-                el.pagination.innerHTML = '';
-                return;
-            }
-
-            const totalPages = Math.ceil(filteredGames.length / PAGE_SIZE);
-            const start = (currentPage - 1) * PAGE_SIZE;
-            const end = Math.min(start + PAGE_SIZE, filteredGames.length);
-
-            const fragment = document.createDocumentFragment();
-            for (let i = start; i < end; i++) {
-                fragment.appendChild(renderGame(filteredGames[i]));
-            }
-            el.gamesContainer.appendChild(fragment);
-
-            renderPagination(currentPage, totalPages);
-        }
-
-        function renderGame(game) {
-            const gameDiv = document.createElement('div');
-            gameDiv.className = 'game-item';
-
-            const title = document.createElement('h3');
-            title.className = 'game-title';
-            title.textContent = game.name;
-            gameDiv.appendChild(title);
-
-            const dl = game.download_links || {};
-            const linksDiv = document.createElement('div');
-            linksDiv.className = 'download-links';
-
-            const addLink = (link, cls, label, host) => {
-                if (!link || typeof link !== 'string') return;
-                const btn = document.createElement('a');
-                btn.href = buildRedirectUrl(link, game.name, host);
-                btn.className = `download-btn ${cls}`;
-                btn.textContent = label;
-                btn.target = '_blank';
-                btn.rel = 'noopener noreferrer';
-                linksDiv.appendChild(btn);
-            };
-
-            if (Array.isArray(dl.mediafire)) {
-                dl.mediafire.forEach((l, i) =>
-                    addLink(l, 'btn-mediafire', `Mediafire ${i + 1}`, 'mediafire'));
-            }
-            if (Array.isArray(dl['1file'])) {
-                dl['1file'].forEach((l, i) =>
-                    addLink(l, 'btn-1file', `1File ${i + 1}`, '1file'));
-            }
-            if (Array.isArray(dl.other)) {
-                dl.other.forEach((l, i) =>
-                    addLink(l, 'btn-other', `Mirror ${i + 1}`, 'other'));
-            }
-
-            if (game.page_url && isValidUrl(game.page_url)) {
-                const btn = document.createElement('a');
-                btn.href = game.page_url;
-                btn.className = 'download-btn btn-page';
-                btn.textContent = 'View Page';
-                btn.target = '_blank';
-                btn.rel = 'noopener noreferrer';
-                linksDiv.appendChild(btn);
-            }
-
-            if (linksDiv.children.length > 0) gameDiv.appendChild(linksDiv);
-
-            const count = getTotalLinks(game);
-            const linkCount = document.createElement('div');
-            linkCount.className = 'link-count';
-            linkCount.textContent =
-                `${formatNumber(count)} download link${count !== 1 ? 's' : ''} available`;
-            gameDiv.appendChild(linkCount);
-
-            return gameDiv;
-        }
-
-        // ============================================================
-        // PAGINATION
-        // ============================================================
-        function renderPagination(current, total) {
-            el.pagination.innerHTML = '';
-            if (total <= 1) return;
-
-            const addBtn = (label, page, opts = {}) => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'page-btn';
-                if (opts.active) btn.classList.add('active');
-                if (opts.disabled) btn.disabled = true;
-                if (opts.ariaLabel) btn.setAttribute('aria-label', opts.ariaLabel);
-                if (opts.active) btn.setAttribute('aria-current', 'page');
-                btn.textContent = label;
-                btn.addEventListener('click', () => goToPage(page));
-                el.pagination.appendChild(btn);
-            };
-
-            const addEllipsis = () => {
-                const span = document.createElement('span');
-                span.className = 'page-ellipsis';
-                span.textContent = '…';
-                el.pagination.appendChild(span);
-            };
-
-            addBtn('‹', current - 1, { disabled: current === 1, ariaLabel: 'Previous page' });
-
-            const pages = [];
-            if (total <= 7) {
-                for (let i = 1; i <= total; i++) pages.push(i);
-            } else {
-                pages.push(1);
-                const start = Math.max(2, current - 1);
-                const end = Math.min(total - 1, current + 1);
-                if (start > 2) pages.push('...');
-                for (let i = start; i <= end; i++) pages.push(i);
-                if (end < total - 1) pages.push('...');
-                pages.push(total);
-            }
-
-            for (const p of pages) {
-                if (p === '...') addEllipsis();
-                else addBtn(String(p), p, { active: p === current });
-            }
-
-            addBtn('›', current + 1, { disabled: current === total, ariaLabel: 'Next page' });
-        }
-
-        function goToPage(page) {
-            currentPage = page;
-            renderPage();
-            const offset = el.gamesContainer.getBoundingClientRect().top + window.scrollY - 120;
-            window.scrollTo({ top: Math.max(0, offset), behavior: 'smooth' });
-        }
-
-        // ============================================================
-        // SCROLL TOP
-        // ============================================================
-        window.addEventListener('scroll', () => {
-            el.scrollTopBtn.classList.toggle('show', window.scrollY > 600);
-        }, { passive: true });
-
-        el.scrollTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // ============================================================
-        // KEYBOARD SHORTCUTS
-        // ============================================================
-        document.addEventListener('keydown', (e) => {
-            const active = document.activeElement;
-            const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
-
-            if (e.key === '/' && !isTyping) {
-                e.preventDefault();
-                el.searchInput.focus();
-                el.searchInput.select();
-                return;
-            }
-            if (e.key === 'Escape' && active === el.searchInput) {
-                el.searchInput.value = '';
-                setSearch('');
-                el.searchInput.blur();
-            }
-        });
-
-        // ============================================================
-        // INIT
-        // ============================================================
-        el.searchInput.addEventListener('input', onSearchInput);
-        el.searchInput.addEventListener('search', (e) => {
-            if (e.target.value === '') setSearch('');
-        });
-
+      };
+      xhr.onerror = function() {
+        state.error = 'Network error while loading database.';
+        state.loaded = true; render();
+      };
+      xhr.send();
+    }
+
+    function processGames(data) {
+      var games = [];
+      for (var i = 0; i < data.length; i++) {
+        var g = data[i];
+        if (!g || typeof g !== 'object') continue;
+        if (typeof g.name !== 'string' || !g.name.trim()) continue;
+        g._id = 'g' + i;
+        g.name = g.name.trim();
+        g._letter = getLetter(g.name);
+        games.push(g);
+      }
+      games.sort(function(a, b) { return compareNames(a.name, b.name); });
+      state.games = games;
+      state.gamesById = {};
+      for (var j = 0; j < games.length; j++) state.gamesById[games[j]._id] = games[j];
+
+      var counts = {};
+      for (var k = 0; k < games.length; k++) {
+        counts[games[k]._letter] = (counts[games[k]._letter] || 0) + 1;
+      }
+      var letters = Object.keys(counts).sort(function(a, b) {
+        if (a === '#') return -1;
+        if (b === '#') return 1;
+        return a < b ? -1 : a > b ? 1 : 0;
+      });
+      state.letters = letters.map(function(L) { return { letter: L, count: counts[L] }; });
+      state.loaded = true; state.error = null; render();
+    }
+
+    /* ---------- Router ---------- */
+    function parseHash() {
+      var h = window.location.hash || '#/home';
+      if (h.charAt(0) === '#') h = h.substring(1);
+      if (h.charAt(0) !== '/') h = '/' + h;
+      var parts = h.split('/').filter(function(s) { return s !== ''; });
+      return { route: parts[0] || 'home', param: parts[1] || null };
+    }
+    function navigate() {
+      var p = parseHash();
+      state.route = p.route; state.gameId = p.param;
+      if (mainEl) mainEl.scrollTop = 0;
+      render();
+    }
+    function setActiveNav(route) {
+      var items = navEl.querySelectorAll('.nav-item');
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].getAttribute('data-route') === route) items[i].classList.add('active');
+        else items[i].classList.remove('active');
+      }
+    }
+
+    /* ---------- Render root ---------- */
+    function render() {
+      if (!state.loaded) {
+        viewEl.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading library…</p></div>';
+        return;
+      }
+      if (state.error) { renderError(state.error); return; }
+      var r = state.route || 'home';
+      setActiveNav(r); updateFavBadge();
+      if (r === 'home') renderHome();
+      else if (r === 'library') renderLibrary();
+      else if (r === 'favorites') renderFavorites();
+      else if (r === 'categories') renderCategories();
+      else if (r === 'game') renderGameDetail(state.gameId);
+      else if (r === 'about') renderAbout();
+      else window.location.hash = '#/home';
+    }
+    function renderError(msg) {
+      viewEl.innerHTML = '';
+      var w = el('div', 'error');
+      w.appendChild(el('div', 'error-title', 'Could not load the library'));
+      w.appendChild(el('div', 'error-text', msg));
+      var b = el('button', 'btn btn-primary', 'Retry');
+      b.type = 'button';
+      b.onclick = function() {
+        state.error = null; state.loaded = false;
+        viewEl.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading library…</p></div>';
         loadGames();
-    </script>
+      };
+      w.appendChild(b); viewEl.appendChild(w);
+    }
+
+    /* ---------- HOME ---------- */
+    function renderHome() {
+      viewEl.innerHTML = '';
+      var featured = pickFeatured();
+      var totalLinks = 0;
+      for (var i = 0; i < state.games.length; i++) totalLinks += getTotalLinks(state.games[i]);
+
+      if (featured) {
+        var hero = el('div', 'hero');
+        var hc = el('div', 'hero-cover');
+        hc.appendChild(createCover(featured));
+        hero.appendChild(hc);
+        var content = el('div', 'hero-content');
+        content.appendChild(el('div', 'hero-label', 'Featured Game'));
+        content.appendChild(el('h2', 'hero-title', featured.name));
+        var n = getTotalLinks(featured);
+        content.appendChild(el('div', 'hero-meta',
+          n + ' download link' + (n !== 1 ? 's' : '') + ' available'));
+        var acts = el('div', 'hero-actions');
+        var vb = el('a', 'btn btn-primary', 'View Game');
+        vb.href = '#/game/' + featured._id;
+        acts.appendChild(vb);
+        var fb = el('button', 'btn btn-secondary',
+          isFavorite(featured._id) ? '★ Favorited' : '☆ Add to Favorites');
+        fb.type = 'button';
+        fb.onclick = function() { toggleFavorite(featured._id); renderHome(); };
+        acts.appendChild(fb);
+        content.appendChild(acts);
+        hero.appendChild(content);
+        viewEl.appendChild(hero);
+      }
+
+      var stats = el('div', 'stats-row');
+      stats.appendChild(createStat(formatNumber(state.games.length), 'Games'));
+      stats.appendChild(createStat(formatNumber(totalLinks), 'Download Links'));
+      stats.appendChild(createStat(formatNumber(state.letters.length), 'Categories'));
+      stats.appendChild(createStat(formatNumber(state.favorites.length), 'Favorites'));
+      viewEl.appendChild(stats);
+
+      var s1 = el('div', 'section');
+      var s1h = el('div', 'section-header');
+      s1h.appendChild(el('h3', 'section-title', 'Browse by Letter'));
+      var allBtn = el('a', 'btn btn-secondary', 'View all');
+      allBtn.href = '#/library';
+      s1h.appendChild(allBtn);
+      s1.appendChild(s1h);
+      var lg = el('div', 'letter-grid');
+      for (var L = 0; L < state.letters.length; L++) {
+        (function(item) {
+          var c = el('button', 'letter-card');
+          c.type = 'button';
+          c.appendChild(el('div', 'letter-card-letter', item.letter));
+          c.appendChild(el('div', 'letter-card-count',
+            formatNumber(item.count) + ' game' + (item.count !== 1 ? 's' : '')));
+          c.onclick = function() {
+            state.lib.letter = item.letter; state.lib.page = 1;
+            window.location.hash = '#/library';
+          };
+          lg.appendChild(c);
+        })(state.letters[L]);
+      }
+      s1.appendChild(lg); viewEl.appendChild(s1);
+
+      var pop = state.games.slice().sort(function(a, b) {
+        return getTotalLinks(b) - getTotalLinks(a);
+      }).slice(0, 6);
+      if (pop.length > 0) {
+        var s2 = el('div', 'section');
+        var s2h = el('div', 'section-header');
+        s2h.appendChild(el('h3', 'section-title', 'Popular in the Library'));
+        s2.appendChild(s2h);
+        s2.appendChild(createGameGrid(pop));
+        viewEl.appendChild(s2);
+      }
+      viewEl.appendChild(el('div', 'view-subtitle',
+        'NEXORA · ' + formatNumber(state.games.length) + ' games in the library'));
+    }
+    function pickFeatured() {
+      if (state.games.length === 0) return null;
+      var best = state.games[0], bl = getTotalLinks(best);
+      for (var i = 1; i < state.games.length; i++) {
+        var n = getTotalLinks(state.games[i]);
+        if (n > bl) { best = state.games[i]; bl = n; }
+      }
+      return best;
+    }
+    function createStat(v, l) {
+      var c = el('div', 'stat-card');
+      c.appendChild(el('div', 'stat-value', v));
+      c.appendChild(el('div', 'stat-label', l));
+      return c;
+    }
+
+    /* ---------- LIBRARY ---------- */
+    function renderLibrary() {
+      viewEl.innerHTML = '';
+      viewEl.appendChild(el('h1', 'view-title', 'Library'));
+      viewEl.appendChild(el('p', 'view-subtitle',
+        'Browse and search the complete game catalog.'));
+
+      var sw = el('div', 'search-wrap');
+      sw.appendChild(el('span', 'search-icon', '⌕'));
+      var inp = document.createElement('input');
+      inp.type = 'search';
+      inp.className = 'search-input';
+      inp.placeholder = 'Search games by name…';
+      inp.value = state.lib.query;
+      inp.setAttribute('aria-label', 'Search games');
+      var timer = null;
+      inp.oninput = function() {
+        var v = inp.value;
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(function() {
+          state.lib.query = v.trim(); state.lib.page = 1;
+          renderLibraryResultsOnly();
+        }, 200);
+      };
+      sw.appendChild(inp); viewEl.appendChild(sw);
+
+      var fb = el('div', 'filter-bar');
+      var allChip = el('button', 'chip' + (state.lib.letter === '' ? ' active' : ''), 'All');
+      allChip.type = 'button';
+      allChip.onclick = function() { state.lib.letter = ''; state.lib.page = 1; renderLibrary(); };
+      fb.appendChild(allChip);
+      for (var i = 0; i < state.letters.length; i++) {
+        (function(it) {
+          var c = el('button', 'chip' + (state.lib.letter === it.letter ? ' active' : ''), it.letter);
+          c.type = 'button';
+          c.title = formatNumber(it.count) + ' games';
+          c.onclick = function() { state.lib.letter = it.letter; state.lib.page = 1; renderLibrary(); };
+          fb.appendChild(c);
+        })(state.letters[i]);
+      }
+      viewEl.appendChild(fb);
+
+      var tb = el('div', 'toolbar');
+      var sg = el('div', 'toolbar-group');
+      sg.appendChild(el('span', 'toolbar-label', 'Sort:'));
+      var sel = document.createElement('select');
+      sel.className = 'select';
+      sel.setAttribute('aria-label', 'Sort games');
+      var opts = [
+        { v: 'az', l: 'A → Z' }, { v: 'za', l: 'Z → A' },
+        { v: 'links_desc', l: 'Most links' }, { v: 'links_asc', l: 'Fewest links' }
+      ];
+      for (var s = 0; s < opts.length; s++) {
+        var o = document.createElement('option');
+        o.value = opts[s].v; o.textContent = opts[s].l;
+        if (state.lib.sort === opts[s].v) o.selected = true;
+        sel.appendChild(o);
+      }
+      sel.onchange = function() {
+        state.lib.sort = sel.value; state.lib.page = 1;
+        renderLibraryResultsOnly();
+      };
+      sg.appendChild(sel); tb.appendChild(sg);
+      var countInfo = el('div', 'toolbar-label', '');
+      countInfo.id = 'libCount';
+      countInfo.style.marginLeft = 'auto';
+      tb.appendChild(countInfo);
+      viewEl.appendChild(tb);
+
+      var res = el('div'); res.id = 'libResults';
+      viewEl.appendChild(res);
+
+      renderLibraryResultsOnly();
+    }
+    function getFilteredLibrary() {
+      var q = state.lib.query.toUpperCase(), L = state.lib.letter, out = [];
+      for (var i = 0; i < state.games.length; i++) {
+        var g = state.games[i];
+        if (L && g._letter !== L) continue;
+        if (q && g.name.toUpperCase().indexOf(q) === -1) continue;
+        out.push(g);
+      }
+      if (state.lib.sort === 'az') out.sort(function(a, b) { return compareNames(a.name, b.name); });
+      else if (state.lib.sort === 'za') out.sort(function(a, b) { return compareNames(b.name, a.name); });
+      else if (state.lib.sort === 'links_desc') out.sort(function(a, b) { return getTotalLinks(b) - getTotalLinks(a); });
+      else if (state.lib.sort === 'links_asc') out.sort(function(a, b) { return getTotalLinks(a) - getTotalLinks(b); });
+      return out;
+    }
+    function renderLibraryResultsOnly() {
+      var res = document.getElementById('libResults');
+      var cnt = document.getElementById('libCount');
+      if (!res) return;
+      var list = getFilteredLibrary();
+      var totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+      if (state.lib.page > totalPages) state.lib.page = totalPages;
+      var start = (state.lib.page - 1) * PAGE_SIZE;
+      var end = Math.min(start + PAGE_SIZE, list.length);
+      var items = list.slice(start, end);
+      if (cnt) cnt.textContent = formatNumber(list.length) + ' game' + (list.length !== 1 ? 's' : '');
+      res.innerHTML = '';
+      if (list.length === 0) {
+        var e = el('div', 'empty');
+        e.appendChild(el('div', 'empty-icon', '○'));
+        e.appendChild(el('div', 'empty-title', 'No games found'));
+        e.appendChild(el('div', 'empty-text', 'Try a different search or filter.'));
+        res.appendChild(e); return;
+      }
+      res.appendChild(createGameGrid(items));
+      if (totalPages > 1) {
+        res.appendChild(createPagination(state.lib.page, totalPages, function(p) {
+          state.lib.page = p; renderLibraryResultsOnly();
+          if (mainEl) mainEl.scrollTop = 0;
+        }));
+      }
+    }
+
+    /* ---------- FAVORITES ---------- */
+    function renderFavorites() {
+      viewEl.innerHTML = '';
+      viewEl.appendChild(el('h1', 'view-title', 'Favorites'));
+      viewEl.appendChild(el('p', 'view-subtitle',
+        'Your saved games are stored locally in this browser.'));
+      var favs = [];
+      for (var i = 0; i < state.favorites.length; i++) {
+        var g = state.gamesById[state.favorites[i]];
+        if (g) favs.push(g);
+      }
+      if (favs.length === 0) {
+        var e = el('div', 'empty');
+        e.appendChild(el('div', 'empty-icon', '☆'));
+        e.appendChild(el('div', 'empty-title', 'No favorites yet'));
+        e.appendChild(el('div', 'empty-text', 'Tap the star on any game card to save it here.'));
+        var b = el('a', 'btn btn-primary', 'Browse the Library');
+        b.href = '#/library';
+        e.appendChild(b); viewEl.appendChild(e); return;
+      }
+      viewEl.appendChild(createGameGrid(favs));
+    }
+
+    /* ---------- CATEGORIES ---------- */
+    function renderCategories() {
+      viewEl.innerHTML = '';
+      viewEl.appendChild(el('h1', 'view-title', 'Categories'));
+      viewEl.appendChild(el('p', 'view-subtitle',
+        'Browse the library by the first letter of each game.'));
+      var g = el('div', 'letter-grid');
+      for (var i = 0; i < state.letters.length; i++) {
+        (function(it) {
+          var c = el('button', 'letter-card');
+          c.type = 'button';
+          c.appendChild(el('div', 'letter-card-letter', it.letter));
+          c.appendChild(el('div', 'letter-card-count',
+            formatNumber(it.count) + ' game' + (it.count !== 1 ? 's' : '')));
+          c.onclick = function() {
+            state.lib.letter = it.letter; state.lib.page = 1;
+            window.location.hash = '#/library';
+          };
+          g.appendChild(c);
+        })(state.letters[i]);
+      }
+      viewEl.appendChild(g);
+    }
+
+    /* ---------- GAME DETAIL ---------- */
+    function renderGameDetail(id) {
+      var game = id ? state.gamesById[id] : null;
+      viewEl.innerHTML = '';
+      if (!game) {
+        var e = el('div', 'empty');
+        e.appendChild(el('div', 'empty-title', 'Game not found'));
+        var b = el('a', 'btn btn-primary', 'Back to Library');
+        b.href = '#/library'; e.appendChild(b);
+        viewEl.appendChild(e); return;
+      }
+      var back = el('a', 'back-link', '← Back to Library');
+      back.href = '#/library';
+      viewEl.appendChild(back);
+
+      var d = el('div', 'detail');
+      var cc = el('div', 'detail-cover');
+      cc.appendChild(createCover(game));
+      d.appendChild(cc);
+
+      var info = el('div');
+      info.appendChild(el('h1', 'detail-title', game.name));
+
+      var meta = el('div', 'detail-meta');
+      var n = getTotalLinks(game);
+      meta.appendChild(el('span', 'meta-pill', n + ' download link' + (n !== 1 ? 's' : '')));
+      meta.appendChild(el('span', 'meta-pill', 'Letter: ' + game._letter));
+      info.appendChild(meta);
+
+      var acts = el('div', 'hero-actions');
+      var fb = el('button',
+        'btn ' + (isFavorite(game._id) ? 'btn-primary' : 'btn-secondary'),
+        isFavorite(game._id) ? '★ Favorited' : '☆ Add to Favorites');
+      fb.type = 'button';
+      fb.onclick = function() { toggleFavorite(game._id); renderGameDetail(game._id); };
+      acts.appendChild(fb); info.appendChild(acts);
+
+      var dl = game.download_links || {}, hasLinks = false;
+      var dls = el('div', 'detail-section');
+      dls.appendChild(el('div', 'detail-section-title', 'Download Sources'));
+      var dg = el('div', 'download-grid');
+      function addLink(link, cls, label, host) {
+        if (!link || typeof link !== 'string') return;
+        var a = document.createElement('a');
+        a.className = 'download-btn ' + cls;
+        a.href = buildRedirectUrl(link, game.name, host);
+        a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.textContent = label;
+        dg.appendChild(a); hasLinks = true;
+      }
+      if (Array.isArray(dl.mediafire)) for (var i = 0; i < dl.mediafire.length; i++)
+        addLink(dl.mediafire[i], 'btn-mediafire', 'Mediafire ' + (i + 1), 'mediafire');
+      if (Array.isArray(dl['1file'])) for (var j = 0; j < dl['1file'].length; j++)
+        addLink(dl['1file'][j], 'btn-1file', '1File ' + (j + 1), '1file');
+      if (Array.isArray(dl.other)) for (var k = 0; k < dl.other.length; k++)
+        addLink(dl.other[k], 'btn-other', 'Mirror ' + (k + 1), 'other');
+      if (hasLinks) { dls.appendChild(dg); info.appendChild(dls); }
+
+      if (isValidHttpUrl(game.page_url)) {
+        var ps = el('div', 'detail-section');
+        ps.appendChild(el('div', 'detail-section-title', 'Source Page'));
+        var a2 = document.createElement('a');
+        a2.className = 'download-btn btn-page-link';
+        a2.href = game.page_url;
+        a2.target = '_blank'; a2.rel = 'noopener noreferrer';
+        a2.textContent = 'View Original Page';
+        ps.appendChild(a2); info.appendChild(ps);
+      }
+      d.appendChild(info); viewEl.appendChild(d);
+    }
+
+    /* ---------- ABOUT ---------- */
+    function renderAbout() {
+      viewEl.innerHTML = '';
+      viewEl.appendChild(el('h1', 'view-title', 'About NEXORA'));
+      viewEl.appendChild(el('p', 'view-subtitle',
+        'A lightweight games library interface optimized for the PlayStation 4 browser.'));
+
+      var tl = 0;
+      for (var i = 0; i < state.games.length; i++) tl += getTotalLinks(state.games[i]);
+      var st = el('div', 'stats-row');
+      st.appendChild(createStat(formatNumber(state.games.length), 'Games'));
+      st.appendChild(createStat(formatNumber(tl), 'Links'));
+      st.appendChild(createStat(formatNumber(state.favorites.length), 'Favorites'));
+      st.appendChild(createStat('v1.0', 'Version'));
+      viewEl.appendChild(st);
+
+      var a = el('div', 'section');
+      a.appendChild(el('h3', 'section-title', 'Design & Tech'));
+      var t = el('div');
+      t.style.marginTop = '16px'; t.style.color = 'var(--muted)';
+      t.style.fontSize = '15px'; t.style.lineHeight = '1.7';
+      t.innerHTML =
+        '<p>NEXORA is built with vanilla HTML, CSS and JavaScript.</p>' +
+        '<p style="margin-top:10px;">No frameworks, no external dependencies, no tracking.</p>' +
+        '<p style="margin-top:10px;">Designed for compatibility with the PS4 system browser ' +
+        'and controller navigation.</p>';
+      a.appendChild(t); viewEl.appendChild(a);
+
+      var s = el('div', 'section');
+      s.appendChild(el('h3', 'section-title', 'Settings'));
+      var cb = el('button', 'btn btn-danger', 'Clear all favorites');
+      cb.type = 'button'; cb.style.marginTop = '16px';
+      cb.onclick = function() {
+        if (window.confirm('Remove all favorites? This cannot be undone.')) {
+          state.favorites = []; saveFavorites(); updateFavBadge(); renderAbout();
+        }
+      };
+      s.appendChild(cb); viewEl.appendChild(s);
+
+      var n = el('div', 'section');
+      n.appendChild(el('h3', 'section-title', 'Legal Notice'));
+      var p = el('p');
+      p.style.marginTop = '16px'; p.style.color = 'var(--muted)';
+      p.style.fontSize = '14px'; p.style.lineHeight = '1.7';
+      p.textContent =
+        'NEXORA is a front-end interface for browsing a game catalog. ' +
+        'It does not host any files. Users are responsible for ensuring that ' +
+        'any content they access through third-party links is properly licensed.';
+      n.appendChild(p); viewEl.appendChild(n);
+    }
+
+    /* ---------- Shared components ---------- */
+    function createGameGrid(games) {
+      var g = el('div', 'game-grid');
+      for (var i = 0; i < games.length; i++) g.appendChild(createGameCard(games[i]));
+      return g;
+    }
+    function createGameCard(game) {
+      var card = el('div', 'game-card');
+      var link = document.createElement('a');
+      link.className = 'game-card-link';
+      link.href = '#/game/' + game._id;
+      link.setAttribute('aria-label', game.name);
+
+      var wrap = el('div', 'cover-wrap');
+      wrap.appendChild(createCover(game));
+      link.appendChild(wrap);
+
+      var info = el('div', 'game-card-info');
+      info.appendChild(el('div', 'game-card-title', game.name));
+      var n = getTotalLinks(game);
+      info.appendChild(el('div', 'game-card-meta', n + ' link' + (n !== 1 ? 's' : '')));
+      link.appendChild(info);
+      card.appendChild(link);
+
+      var fb = el('button',
+        'game-card-fav' + (isFavorite(game._id) ? ' active' : ''),
+        isFavorite(game._id) ? '★' : '☆');
+      fb.type = 'button';
+      fb.setAttribute('aria-label',
+        (isFavorite(game._id) ? 'Remove ' : 'Add ') + game.name +
+        (isFavorite(game._id) ? ' from' : ' to') + ' favorites');
+      fb.onclick = function(e) {
+        e.preventDefault(); e.stopPropagation();
+        toggleFavorite(game._id);
+        if (isFavorite(game._id)) { fb.textContent = '★'; fb.classList.add('active'); }
+        else { fb.textContent = '☆'; fb.classList.remove('active'); }
+        if (state.route === 'favorites') renderFavorites();
+      };
+      card.appendChild(fb);
+      return card;
+    }
+    function createCover(game) {
+      var wrap = el('div', 'cover-wrap');
+      var url = getExternalCoverUrl(game);
+      if (url) {
+        var ph = buildPlaceholder(game);
+        ph.style.display = 'none';
+        var img = document.createElement('img');
+        img.className = 'cover-img';
+        img.src = url; img.alt = ''; img.setAttribute('loading', 'lazy');
+        img.onerror = function() { img.style.display = 'none'; ph.style.display = 'flex'; };
+        wrap.appendChild(ph); wrap.appendChild(img);
+      } else {
+        wrap.appendChild(buildPlaceholder(game));
+      }
+      return wrap;
+    }
+    function buildPlaceholder(game) {
+      var p = el('div', 'cover-placeholder');
+      p.appendChild(el('span', 'cover-letter', game._letter === '#' ? '?' : game._letter));
+      return p;
+    }
+    function createPagination(current, total, onPage) {
+      var nav = el('nav', 'pagination');
+      nav.setAttribute('aria-label', 'Pagination');
+      function addBtn(label, page, opts) {
+        opts = opts || {};
+        var b = el('button', 'page-btn' + (opts.active ? ' active' : ''), label);
+        b.type = 'button';
+        if (opts.disabled) b.disabled = true;
+        if (opts.active) b.setAttribute('aria-current', 'page');
+        if (opts.ariaLabel) b.setAttribute('aria-label', opts.ariaLabel);
+        b.onclick = function() { onPage(page); };
+        nav.appendChild(b);
+      }
+      addBtn('‹', current - 1, { disabled: current === 1, ariaLabel: 'Previous page' });
+      var pages = [];
+      if (total <= 7) { for (var i = 1; i <= total; i++) pages.push(i); }
+      else {
+        pages.push(1);
+        var s = Math.max(2, current - 1), e = Math.min(total - 1, current + 1);
+        if (s > 2) pages.push('...');
+        for (var j = s; j <= e; j++) pages.push(j);
+        if (e < total - 1) pages.push('...');
+        pages.push(total);
+      }
+      for (var k = 0; k < pages.length; k++) {
+        var p = pages[k];
+        if (p === '...') nav.appendChild(el('span', 'page-ellipsis', '…'));
+        else addBtn(String(p), p, { active: p === current });
+      }
+      addBtn('›', current + 1, { disabled: current === total, ariaLabel: 'Next page' });
+      return nav;
+    }
+
+    /* ---------- Init ---------- */
+    function init() {
+      loadFavorites(); updateFavBadge();
+      if (!window.location.hash) window.location.hash = '#/home';
+      window.addEventListener('hashchange', navigate, false);
+      navigate();
+      loadGames();
+    }
+    if (document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', init, false);
+    else init();
+  })();
+  </script>
 </body>
 </html>
