@@ -3,73 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Complete database of 17,065+ PS4 games with direct download links from Mediafire, 1File, and more. Free PKG files for jailbroken PS4 consoles.">
-    <meta name="keywords" content="PS4 games, PS4 PKG, PS4 download, free PS4 games, jailbroken PS4, Mediafire, 1File">
-    <title>PS4 Games Database - 17,065+ Games with Download Links</title>
+    <meta name="description" content="Complete database of PS4 games with download links from Mediafire, 1File, and more.">
+    <title>PS4 Games Database - Complete Catalog</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            -webkit-font-smoothing: antialiased;
         }
-        
         .container {
             max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
         }
-        
         header {
             background: linear-gradient(135deg, #003791 0%, #0066cc 100%);
             color: white;
             padding: 40px;
             text-align: center;
+            border-radius: 15px 15px 0 0;
         }
-        
-        h1 {
-            font-size: 3em;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        
+        h1 { font-size: 3em; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
         .stats {
             background: rgba(255,255,255,0.1);
             padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
         }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 2em;
-            font-weight: bold;
-            display: block;
-        }
-        
-        .stat-label {
-            font-size: 0.9em;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
-        
-        .search-container {
-            padding: 30px;
-            background: #f8f9fa;
-            border-bottom: 2px solid #e9ecef;
-        }
-        
+        .stat-item { text-align: center; }
+        .stat-number { font-size: 2em; font-weight: bold; display: block; font-variant-numeric: tabular-nums; }
+        .stat-label { font-size: 0.9em; opacity: 0.9; margin-top: 5px; }
+
+        .search-container { padding: 30px; background: #f8f9fa; border-bottom: 2px solid #e9ecef; }
         #searchInput {
             width: 100%;
             padding: 18px 25px;
@@ -77,153 +51,173 @@
             border: 2px solid #003791;
             border-radius: 50px;
             outline: none;
-            transition: all 0.3s;
+            transition: box-shadow 0.2s, border-color 0.2s;
+            font-family: inherit;
         }
-        
         #searchInput:focus {
             border-color: #0066cc;
-            box-shadow: 0 0 0 4px rgba(0, 55, 145, 0.1);
+            box-shadow: 0 0 0 4px rgba(0, 55, 145, 0.15);
         }
-        
-        .search-info {
-            margin-top: 15px;
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .games-container {
-            padding: 30px;
-            max-height: 700px;
-            overflow-y: auto;
-        }
-        
-        .letter-section {
-            margin-bottom: 30px;
-        }
-        
-        .letter-header {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #003791;
-            padding: 15px 0;
-            border-bottom: 4px solid #003791;
-            margin-bottom: 20px;
+        .search-info { margin-top: 15px; text-align: center; color: #555; font-size: 14px; min-height: 20px; }
+
+        /* Sticky letter nav (horizontal scroll, no wrap) */
+        .letter-nav {
             position: sticky;
             top: 0;
+            z-index: 20;
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 6px;
+            padding: 12px 30px;
             background: white;
-            z-index: 10;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
         }
-        
+        .letter-chip {
+            flex-shrink: 0;
+            min-width: 38px;
+            padding: 6px 12px;
+            border: 1px solid #d0d7de;
+            background: white;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+            color: #333;
+            font-family: inherit;
+        }
+        .letter-chip:hover:not(.active) { background: #e3f2fd; border-color: #003791; color: #003791; }
+        .letter-chip.active { background: #003791; color: white; border-color: #003791; }
+
+        .active-filters {
+            display: none;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px 30px;
+            background: #fff8e1;
+            border-bottom: 1px solid #ffe082;
+            font-size: 14px;
+            color: #795548;
+        }
+        .active-filters.show { display: flex; }
+        .filter-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: white;
+            border: 1px solid #ffb300;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+        .filter-tag button {
+            border: none; background: none; cursor: pointer;
+            color: #795548; font-size: 16px; line-height: 1; padding: 0;
+        }
+        .filter-tag button:hover { color: #d32f2f; }
+        .clear-filters {
+            padding: 4px 10px;
+            border: 1px solid #fb8c00;
+            background: white;
+            color: #e65100;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            font-family: inherit;
+        }
+        .clear-filters:hover { background: #fb8c00; color: white; }
+
+        .games-container { padding: 24px 30px; min-height: 300px; }
         .game-item {
-            padding: 20px;
+            padding: 18px 20px;
             margin: 10px 0;
             border-radius: 10px;
-            transition: all 0.2s;
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
             border-left: 5px solid transparent;
             background: #f8f9fa;
         }
-        
         .game-item:hover {
             background: #e3f2fd;
             border-left-color: #003791;
-            transform: translateX(8px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-        
         .game-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             color: #003791;
             margin-bottom: 10px;
+            line-height: 1.3;
+            word-break: break-word;
         }
-        
-        .download-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
+        .download-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
         .download-btn {
-            padding: 8px 16px;
+            padding: 7px 14px;
             border-radius: 5px;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            transition: all 0.2s;
+            transition: background 0.2s, transform 0.2s;
             display: inline-block;
         }
-        
-        .btn-mediafire {
-            background: #1e88e5;
-            color: white;
+        .btn-mediafire { background: #1e88e5; color: white; }
+        .btn-mediafire:hover { background: #1565c0; transform: translateY(-2px); }
+        .btn-1file { background: #43a047; color: white; }
+        .btn-1file:hover { background: #2e7d32; transform: translateY(-2px); }
+        .btn-other { background: #fb8c00; color: white; }
+        .btn-other:hover { background: #e65100; transform: translateY(-2px); }
+        .btn-page { background: #6c757d; color: white; }
+        .btn-page:hover { background: #495057; transform: translateY(-2px); }
+        .link-count { font-size: 12px; color: #666; margin-top: 8px; }
+
+        .pagination {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            padding: 20px 30px;
+            border-top: 1px solid #e9ecef;
+            background: #fafbfc;
         }
-        
-        .btn-mediafire:hover {
-            background: #1565c0;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(30, 136, 229, 0.3);
+        .page-btn {
+            min-width: 40px;
+            height: 40px;
+            padding: 0 12px;
+            border: 1px solid #d0d7de;
+            background: white;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+            color: #333;
+            font-family: inherit;
         }
-        
-        .btn-1file {
-            background: #43a047;
-            color: white;
-        }
-        
-        .btn-1file:hover {
-            background: #2e7d32;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(67, 160, 71, 0.3);
-        }
-        
-        .btn-other {
-            background: #fb8c00;
-            color: white;
-        }
-        
-        .btn-other:hover {
-            background: #e65100;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(251, 140, 0, 0.3);
-        }
-        
-        .btn-page {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn-page:hover {
-            background: #495057;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
-        }
-        
-        .link-count {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-        }
-        
+        .page-btn:hover:not(:disabled):not(.active) { background: #e3f2fd; border-color: #003791; color: #003791; }
+        .page-btn.active { background: #003791; color: white; border-color: #003791; cursor: default; }
+        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .page-ellipsis { padding: 0 4px; color: #666; user-select: none; }
+
         footer {
             background: #f8f9fa;
             padding: 25px;
             text-align: center;
             color: #666;
             border-top: 2px solid #e9ecef;
+            font-size: 14px;
+            line-height: 1.6;
+            border-radius: 0 0 15px 15px;
         }
-        
-        footer a {
-            color: #003791;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        footer a:hover {
-            text-decoration: underline;
-        }
-        
+        footer a { color: #003791; text-decoration: none; font-weight: 500; }
+        footer a:hover { text-decoration: underline; }
+
         .scroll-top {
             position: fixed;
             bottom: 30px;
@@ -232,38 +226,94 @@
             color: white;
             width: 50px;
             height: 50px;
+            border: none;
             border-radius: 50%;
             display: none;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: all 0.3s;
-            font-size: 24px;
+            transition: background 0.2s, transform 0.2s;
+            font-size: 22px;
+            font-family: inherit;
+            z-index: 100;
         }
-        
-        .scroll-top:hover {
-            background: #0066cc;
-            transform: scale(1.1);
-        }
-        
-        .scroll-top.show {
-            display: flex;
-        }
-        
-        .loading {
+        .scroll-top:hover { background: #0066cc; transform: scale(1.08); }
+        .scroll-top.show { display: flex; }
+
+        .loading, .empty-state, .error-state {
             text-align: center;
-            padding: 50px;
-            font-size: 18px;
+            padding: 60px 20px;
+            font-size: 16px;
             color: #666;
         }
-        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 16px;
+            border: 4px solid #e9ecef;
+            border-top-color: #003791;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error-state .error-detail {
+            color: #d32f2f;
+            font-size: 13px;
+            margin: 10px 0 20px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            word-break: break-word;
+        }
+        .retry-btn {
+            padding: 10px 22px;
+            background: #003791;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .retry-btn:hover { background: #0066cc; }
+
+        .sr-only {
+            position: absolute;
+            width: 1px; height: 1px;
+            padding: 0; margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        :focus-visible { outline: 3px solid #ffb300; outline-offset: 2px; }
+
         @media (max-width: 768px) {
-            h1 { font-size: 2em; }
+            body { padding: 10px; }
+            h1 { font-size: 1.8em; }
             .stat-number { font-size: 1.5em; }
-            #searchInput { font-size: 16px; padding: 15px 20px; }
-            .game-title { font-size: 16px; }
-            .download-btn { padding: 6px 12px; font-size: 12px; }
+            header { padding: 24px 20px; }
+            .search-container { padding: 20px; }
+            #searchInput { font-size: 16px; padding: 14px 20px; }
+            .letter-nav { padding: 10px 16px; }
+            .games-container { padding: 16px; }
+            .game-title { font-size: 15px; }
+            .download-btn { padding: 6px 10px; font-size: 12px; }
+            .pagination { padding: 16px; gap: 4px; }
+            .page-btn { min-width: 36px; height: 36px; padding: 0 8px; font-size: 13px; }
+            .scroll-top { bottom: 16px; right: 16px; width: 44px; height: 44px; font-size: 18px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .spinner { animation: none; border-color: #003791; }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .download-btn:hover, .scroll-top:hover { transform: none; }
         }
     </style>
 </head>
@@ -273,200 +323,538 @@
             <h1>🎮 PS4 Games Complete Database</h1>
             <div class="stats">
                 <div class="stat-item">
-                    <span class="stat-number" id="totalGames">17,065</span>
+                    <span class="stat-number" id="totalGames">—</span>
                     <span class="stat-label">Total Games</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number" id="totalLinks">45,910</span>
+                    <span class="stat-number" id="totalLinks">—</span>
                     <span class="stat-label">Download Links</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">3 Sources</span>
-                    <span class="stat-label">Database</span>
+                    <span class="stat-number" id="totalLetters">—</span>
+                    <span class="stat-label">Letters</span>
                 </div>
             </div>
         </header>
-        
+
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="🔍 Search for games... (e.g., 'Batman', 'Final Fantasy', 'Call of Duty')" onkeyup="searchGames()">
-            <div class="search-info" id="searchInfo">Loading games database...</div>
+            <label for="searchInput" class="sr-only">Search games by name</label>
+            <input type="search" id="searchInput"
+                   placeholder="🔍 Search for games... (press / to focus)"
+                   autocomplete="off" spellcheck="false" aria-describedby="searchInfo">
+            <div class="search-info" id="searchInfo" role="status" aria-live="polite">Loading games database...</div>
         </div>
-        
+
+        <nav class="letter-nav" id="letterNav" aria-label="Filter by first letter"></nav>
+        <div class="active-filters" id="activeFilters" aria-live="polite"></div>
+
         <div class="games-container" id="gamesContainer">
-            <div class="loading">Loading 17,065 games with download links...</div>
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading games database...</p>
+            </div>
         </div>
-        
+
+        <nav class="pagination" id="pagination" aria-label="Pagination"></nav>
+
         <footer>
-            <p><strong>PS4 Games Database</strong> | 17,065+ Games | 45,910+ Download Links</p>
+            <p><strong>PS4 Games Database</strong> — <span id="footerCount">Loading...</span></p>
             <p>Sources: dlpsgame.com, romsfun.com, arabicps4games.github.io</p>
-            <p>Built with <a href="https://galaxy.ai/?via=start-building" target="_blank">Galaxy.ai</a></p>
+            <p>Built with <a href="https://galaxy.ai/?via=start-building" target="_blank" rel="noopener noreferrer">Galaxy.ai</a></p>
         </footer>
     </div>
-    
-    <div class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</div>
-    
+
+    <button class="scroll-top" id="scrollTop" type="button" aria-label="Scroll to top">↑</button>
+
     <script>
+        // ============================================================
+        // CONFIG
+        // ============================================================
+        const PAGE_SIZE = 100;
+        const SEARCH_DEBOUNCE_MS = 250;
+
+        // ============================================================
+        // STATE
+        // ============================================================
         let allGames = [];
-        
-        // Load games data
-        async function loadGames() {
+        let filteredGames = [];
+        let currentPage = 1;
+        let currentLetter = '';
+        let searchQuery = '';
+        let letterCounts = {};
+        let debounceTimer = null;
+
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+        const el = {
+            searchInput: document.getElementById('searchInput'),
+            searchInfo: document.getElementById('searchInfo'),
+            gamesContainer: document.getElementById('gamesContainer'),
+            letterNav: document.getElementById('letterNav'),
+            activeFilters: document.getElementById('activeFilters'),
+            pagination: document.getElementById('pagination'),
+            totalGames: document.getElementById('totalGames'),
+            totalLinks: document.getElementById('totalLinks'),
+            totalLetters: document.getElementById('totalLetters'),
+            footerCount: document.getElementById('footerCount'),
+            scrollTopBtn: document.getElementById('scrollTop'),
+        };
+
+        // ============================================================
+        // HELPERS
+        // ============================================================
+        function computeLetter(name) {
+            if (!name || typeof name !== 'string') return '#';
+            const first = name.trim().charAt(0);
+            if (!first) return '#';
+            const upper = first.toUpperCase();
+            return /[A-Z]/.test(upper) ? upper : '#';
+        }
+
+        function getTotalLinks(game) {
+            if (typeof game.total_links === 'number' && game.total_links >= 0) {
+                return game.total_links;
+            }
+            const dl = game.download_links || {};
+            const mf = Array.isArray(dl.mediafire) ? dl.mediafire.length : 0;
+            const of = Array.isArray(dl['1file']) ? dl['1file'].length : 0;
+            const ot = Array.isArray(dl.other) ? dl.other.length : 0;
+            return mf + of + ot;
+        }
+
+        function isValidUrl(url) {
+            if (!url || typeof url !== 'string') return false;
             try {
-                const response = await fetch('ps4_games_expanded.json');
-                allGames = await response.json();
-                displayGames(allGames);
-                document.getElementById('searchInfo').textContent = `Showing all ${allGames.length.toLocaleString()} games`;
-            } catch (error) {
-                document.getElementById('gamesContainer').innerHTML = '<div class="loading">Error loading games database. Please refresh the page.</div>';
-                console.error('Error loading games:', error);
+                const u = new URL(url, window.location.href);
+                return u.protocol === 'http:' || u.protocol === 'https:';
+            } catch {
+                return false;
             }
         }
-        
-        function displayGames(games) {
-            const container = document.getElementById('gamesContainer');
-            container.innerHTML = '';
-            
-            // Group by first letter
-            const grouped = {};
-            games.forEach(game => {
-                const firstChar = game.name[0].toUpperCase();
-                const letter = /[A-Z]/.test(firstChar) ? firstChar : '#';
-                if (!grouped[letter]) grouped[letter] = [];
-                grouped[letter].push(game);
+
+        function buildRedirectUrl(link, gameName, host) {
+            const params = new URLSearchParams({
+                url: String(link),
+                game: String(gameName),
+                host: String(host),
             });
-            
-            // Sort letters
-            const letters = Object.keys(grouped).sort((a, b) => {
+            return `redirect-optimized.html?${params.toString()}`;
+        }
+
+        function formatNumber(n) { return Number(n).toLocaleString('en-US'); }
+
+        // ============================================================
+        // LOAD
+        // ============================================================
+        async function loadGames() {
+            el.gamesContainer.innerHTML =
+                '<div class="loading"><div class="spinner"></div><p>Loading games database...</p></div>';
+            el.pagination.innerHTML = '';
+            el.letterNav.innerHTML = '';
+            el.activeFilters.classList.remove('show');
+            el.searchInfo.textContent = 'Loading games database...';
+
+            try {
+                const response = await fetch('ps4_games_expanded.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status} — ${response.statusText || 'could not load file'}`);
+                }
+                const data = await response.json();
+
+                if (!Array.isArray(data)) {
+                    throw new Error('Invalid JSON: expected an array of games');
+                }
+
+                allGames = data
+                    .filter(g => g && typeof g === 'object'
+                        && typeof g.name === 'string' && g.name.trim())
+                    .map(g => ({ ...g, name: g.name.trim(), letter: computeLetter(g.name) }));
+
+                if (allGames.length === 0) {
+                    throw new Error('Database is empty or has no valid games');
+                }
+
+                allGames.sort((a, b) =>
+                    a.name.localeCompare(b.name, 'en', { sensitivity: 'base', numeric: true })
+                );
+
+                letterCounts = {};
+                for (const g of allGames) {
+                    letterCounts[g.letter] = (letterCounts[g.letter] || 0) + 1;
+                }
+
+                const totalLinks = allGames.reduce((s, g) => s + getTotalLinks(g), 0);
+                const letters = Object.keys(letterCounts).length;
+                el.totalGames.textContent = formatNumber(allGames.length);
+                el.totalLinks.textContent = formatNumber(totalLinks);
+                el.totalLetters.textContent = letters;
+                el.footerCount.textContent =
+                    `${formatNumber(allGames.length)} games · ${formatNumber(totalLinks)} links`;
+
+                renderLetterNav();
+                applyFilters({ resetPage: true });
+
+            } catch (error) {
+                console.error('Error loading games:', error);
+                showError(error.message || 'Unknown error');
+            }
+        }
+
+        function showError(message) {
+            el.gamesContainer.innerHTML = '';
+            const wrap = document.createElement('div');
+            wrap.className = 'error-state';
+
+            const p = document.createElement('p');
+            p.textContent = 'Could not load the games database.';
+            wrap.appendChild(p);
+
+            const p2 = document.createElement('p');
+            p2.className = 'error-detail';
+            p2.textContent = message;
+            wrap.appendChild(p2);
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'retry-btn';
+            btn.textContent = 'Retry';
+            btn.addEventListener('click', loadGames);
+            wrap.appendChild(btn);
+
+            el.gamesContainer.appendChild(wrap);
+            el.searchInfo.textContent = 'Error loading games database';
+            el.pagination.innerHTML = '';
+        }
+
+        // ============================================================
+        // FILTERS
+        // ============================================================
+        function applyFilters({ resetPage = false } = {}) {
+            if (resetPage) currentPage = 1;
+
+            filteredGames = allGames;
+            if (currentLetter) filteredGames = filteredGames.filter(g => g.letter === currentLetter);
+            if (searchQuery) {
+                const q = searchQuery.toUpperCase();
+                filteredGames = filteredGames.filter(g => g.name.toUpperCase().includes(q));
+            }
+
+            const totalPages = Math.max(1, Math.ceil(filteredGames.length / PAGE_SIZE));
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            updateSearchInfo();
+            updateActiveFilters();
+            renderLetterNavActiveState();
+            renderPage();
+        }
+
+        function updateSearchInfo() {
+            const shown = filteredGames.length;
+            const total = allGames.length;
+            el.searchInfo.textContent = (shown === total)
+                ? `Showing all ${formatNumber(total)} games`
+                : `Showing ${formatNumber(shown)} of ${formatNumber(total)} games`;
+        }
+
+        function updateActiveFilters() {
+            el.activeFilters.innerHTML = '';
+
+            if (!currentLetter && !searchQuery) {
+                el.activeFilters.classList.remove('show');
+                return;
+            }
+            el.activeFilters.classList.add('show');
+
+            if (currentLetter) {
+                const tag = document.createElement('span');
+                tag.className = 'filter-tag';
+                tag.textContent =
+                    `Letter: ${currentLetter} (${formatNumber(letterCounts[currentLetter] || 0)})`;
+                const x = document.createElement('button');
+                x.type = 'button';
+                x.textContent = '×';
+                x.setAttribute('aria-label', 'Remove letter filter');
+                x.addEventListener('click', () => setLetter(''));
+                tag.appendChild(x);
+                el.activeFilters.appendChild(tag);
+            }
+
+            if (searchQuery) {
+                const tag = document.createElement('span');
+                tag.className = 'filter-tag';
+                tag.textContent = `Search: "${searchQuery}"`;
+                const x = document.createElement('button');
+                x.type = 'button';
+                x.textContent = '×';
+                x.setAttribute('aria-label', 'Remove search');
+                x.addEventListener('click', () => {
+                    el.searchInput.value = '';
+                    setSearch('');
+                });
+                tag.appendChild(x);
+                el.activeFilters.appendChild(tag);
+            }
+
+            const clearBtn = document.createElement('button');
+            clearBtn.type = 'button';
+            clearBtn.className = 'clear-filters';
+            clearBtn.textContent = 'Clear all';
+            clearBtn.addEventListener('click', () => {
+                el.searchInput.value = '';
+                searchQuery = '';
+                currentLetter = '';
+                applyFilters({ resetPage: true });
+            });
+            el.activeFilters.appendChild(clearBtn);
+        }
+
+        // ============================================================
+        // LETTER NAV
+        // ============================================================
+        function renderLetterNav() {
+            el.letterNav.innerHTML = '';
+
+            const allBtn = document.createElement('button');
+            allBtn.type = 'button';
+            allBtn.className = 'letter-chip';
+            allBtn.dataset.letter = '';
+            allBtn.textContent = `All (${formatNumber(allGames.length)})`;
+            allBtn.addEventListener('click', () => setLetter(''));
+            el.letterNav.appendChild(allBtn);
+
+            const letters = Object.keys(letterCounts).sort((a, b) => {
                 if (a === '#') return -1;
                 if (b === '#') return 1;
                 return a.localeCompare(b);
             });
-            
-            // Create sections
-            letters.forEach(letter => {
-                const section = document.createElement('div');
-                section.className = 'letter-section';
-                section.setAttribute('data-letter', letter);
-                
-                const header = document.createElement('div');
-                header.className = 'letter-header';
-                header.textContent = letter;
-                section.appendChild(header);
-                
-                grouped[letter].forEach(game => {
-                    const gameDiv = document.createElement('div');
-                    gameDiv.className = 'game-item';
-                    
-                    const title = document.createElement('div');
-                    title.className = 'game-title';
-                    title.textContent = game.name;
-                    gameDiv.appendChild(title);
-                    
-                    const linksDiv = document.createElement('div');
-                    linksDiv.className = 'download-links';
-                    
-                    // Add Mediafire links
-                    (game.download_links?.mediafire || []).forEach((link, index) => {
-                        const btn = document.createElement('a');
-                        btn.href = `redirect-optimized.html?url=${encodeURIComponent(link)}&game=${encodeURIComponent(game.name)}&host=mediafire`;
-                        btn.className = 'download-btn btn-mediafire';
-                        btn.textContent = `Mediafire ${index + 1}`;
-                        btn.target = '_blank';
-                        linksDiv.appendChild(btn);
-                    });
-                    
-                    // Add 1File links
-                    (game.download_links?.['1file'] || []).forEach((link, index) => {
-                        const btn = document.createElement('a');
-                        btn.href = `redirect-optimized.html?url=${encodeURIComponent(link)}&game=${encodeURIComponent(game.name)}&host=1file`;
-                        btn.className = 'download-btn btn-1file';
-                        btn.textContent = `1File ${index + 1}`;
-                        btn.target = '_blank';
-                        linksDiv.appendChild(btn);
-                    });
-                    
-                    // Add other links
-                    (game.download_links?.other || []).forEach((link, index) => {
-                        const btn = document.createElement('a');
-                        btn.href = `redirect-optimized.html?url=${encodeURIComponent(link)}&game=${encodeURIComponent(game.name)}&host=other`;
-                        btn.className = 'download-btn btn-other';
-                        btn.textContent = `Mirror ${index + 1}`;
-                        btn.target = '_blank';
-                        linksDiv.appendChild(btn);
-                    });
-                    
-                    // Add page link
-                    const pageBtn = document.createElement('a');
-                    pageBtn.href = game.page_url;
-                    pageBtn.className = 'download-btn btn-page';
-                    pageBtn.textContent = 'View Page';
-                    pageBtn.target = '_blank';
-                    linksDiv.appendChild(pageBtn);
-                    
-                    gameDiv.appendChild(linksDiv);
-                    
-                    const linkCount = document.createElement('div');
-                    linkCount.className = 'link-count';
-                    linkCount.textContent = `${game.total_links} download link${game.total_links !== 1 ? 's' : ''} available`;
-                    gameDiv.appendChild(linkCount);
-                    
-                    section.appendChild(gameDiv);
-                });
-                
-                container.appendChild(section);
-            });
-        }
-        
-        function searchGames() {
-            const input = document.getElementById('searchInput');
-            const filter = input.value.toUpperCase();
-            const sections = document.querySelectorAll('.letter-section');
-            const searchInfo = document.getElementById('searchInfo');
-            let visibleCount = 0;
-            
-            sections.forEach(section => {
-                const games = section.querySelectorAll('.game-item');
-                let sectionHasVisible = false;
-                
-                games.forEach(game => {
-                    const text = game.textContent || game.innerText;
-                    if (text.toUpperCase().indexOf(filter) > -1) {
-                        game.style.display = '';
-                        sectionHasVisible = true;
-                        visibleCount++;
-                    } else {
-                        game.style.display = 'none';
-                    }
-                });
-                
-                section.style.display = sectionHasVisible ? '' : 'none';
-            });
-            
-            if (filter) {
-                searchInfo.textContent = `Found ${visibleCount.toLocaleString()} game${visibleCount !== 1 ? 's' : ''} matching "${input.value}"`;
-            } else {
-                searchInfo.textContent = `Showing all ${allGames.length.toLocaleString()} games`;
+
+            for (const letter of letters) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'letter-chip';
+                btn.dataset.letter = letter;
+                btn.textContent = letter;
+                btn.title = `${formatNumber(letterCounts[letter])} game${letterCounts[letter] !== 1 ? 's' : ''}`;
+                btn.setAttribute('aria-label',
+                    `Filter by ${letter} (${formatNumber(letterCounts[letter])} games)`);
+                btn.addEventListener('click', () => setLetter(letter));
+                el.letterNav.appendChild(btn);
             }
+
+            renderLetterNavActiveState();
         }
-        
-        // Scroll to top button
-        const scrollBtn = document.getElementById('scrollTop');
-        const gamesContainer = document.getElementById('gamesContainer');
-        
-        gamesContainer.addEventListener('scroll', () => {
-            if (gamesContainer.scrollTop > 300) {
-                scrollBtn.classList.add('show');
+
+        function renderLetterNavActiveState() {
+            el.letterNav.querySelectorAll('.letter-chip').forEach(chip => {
+                chip.classList.toggle('active', (chip.dataset.letter || '') === currentLetter);
+            });
+        }
+
+        function setLetter(letter) {
+            currentLetter = letter || '';
+            applyFilters({ resetPage: true });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================================
+        // SEARCH
+        // ============================================================
+        function setSearch(value) {
+            searchQuery = value.trim();
+            applyFilters({ resetPage: true });
+        }
+
+        function onSearchInput(e) {
+            const value = e.target.value;
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => setSearch(value), SEARCH_DEBOUNCE_MS);
+        }
+
+        // ============================================================
+        // RENDER PAGE
+        // ============================================================
+        function renderPage() {
+            el.gamesContainer.innerHTML = '';
+
+            if (filteredGames.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'empty-state';
+                empty.textContent = 'No games match your filters.';
+                el.gamesContainer.appendChild(empty);
+                el.pagination.innerHTML = '';
+                return;
+            }
+
+            const totalPages = Math.ceil(filteredGames.length / PAGE_SIZE);
+            const start = (currentPage - 1) * PAGE_SIZE;
+            const end = Math.min(start + PAGE_SIZE, filteredGames.length);
+
+            const fragment = document.createDocumentFragment();
+            for (let i = start; i < end; i++) {
+                fragment.appendChild(renderGame(filteredGames[i]));
+            }
+            el.gamesContainer.appendChild(fragment);
+
+            renderPagination(currentPage, totalPages);
+        }
+
+        function renderGame(game) {
+            const gameDiv = document.createElement('div');
+            gameDiv.className = 'game-item';
+
+            const title = document.createElement('h3');
+            title.className = 'game-title';
+            title.textContent = game.name;
+            gameDiv.appendChild(title);
+
+            const dl = game.download_links || {};
+            const linksDiv = document.createElement('div');
+            linksDiv.className = 'download-links';
+
+            const addLink = (link, cls, label, host) => {
+                if (!link || typeof link !== 'string') return;
+                const btn = document.createElement('a');
+                btn.href = buildRedirectUrl(link, game.name, host);
+                btn.className = `download-btn ${cls}`;
+                btn.textContent = label;
+                btn.target = '_blank';
+                btn.rel = 'noopener noreferrer';
+                linksDiv.appendChild(btn);
+            };
+
+            if (Array.isArray(dl.mediafire)) {
+                dl.mediafire.forEach((l, i) =>
+                    addLink(l, 'btn-mediafire', `Mediafire ${i + 1}`, 'mediafire'));
+            }
+            if (Array.isArray(dl['1file'])) {
+                dl['1file'].forEach((l, i) =>
+                    addLink(l, 'btn-1file', `1File ${i + 1}`, '1file'));
+            }
+            if (Array.isArray(dl.other)) {
+                dl.other.forEach((l, i) =>
+                    addLink(l, 'btn-other', `Mirror ${i + 1}`, 'other'));
+            }
+
+            if (game.page_url && isValidUrl(game.page_url)) {
+                const btn = document.createElement('a');
+                btn.href = game.page_url;
+                btn.className = 'download-btn btn-page';
+                btn.textContent = 'View Page';
+                btn.target = '_blank';
+                btn.rel = 'noopener noreferrer';
+                linksDiv.appendChild(btn);
+            }
+
+            if (linksDiv.children.length > 0) gameDiv.appendChild(linksDiv);
+
+            const count = getTotalLinks(game);
+            const linkCount = document.createElement('div');
+            linkCount.className = 'link-count';
+            linkCount.textContent =
+                `${formatNumber(count)} download link${count !== 1 ? 's' : ''} available`;
+            gameDiv.appendChild(linkCount);
+
+            return gameDiv;
+        }
+
+        // ============================================================
+        // PAGINATION
+        // ============================================================
+        function renderPagination(current, total) {
+            el.pagination.innerHTML = '';
+            if (total <= 1) return;
+
+            const addBtn = (label, page, opts = {}) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'page-btn';
+                if (opts.active) btn.classList.add('active');
+                if (opts.disabled) btn.disabled = true;
+                if (opts.ariaLabel) btn.setAttribute('aria-label', opts.ariaLabel);
+                if (opts.active) btn.setAttribute('aria-current', 'page');
+                btn.textContent = label;
+                btn.addEventListener('click', () => goToPage(page));
+                el.pagination.appendChild(btn);
+            };
+
+            const addEllipsis = () => {
+                const span = document.createElement('span');
+                span.className = 'page-ellipsis';
+                span.textContent = '…';
+                el.pagination.appendChild(span);
+            };
+
+            addBtn('‹', current - 1, { disabled: current === 1, ariaLabel: 'Previous page' });
+
+            const pages = [];
+            if (total <= 7) {
+                for (let i = 1; i <= total; i++) pages.push(i);
             } else {
-                scrollBtn.classList.remove('show');
+                pages.push(1);
+                const start = Math.max(2, current - 1);
+                const end = Math.min(total - 1, current + 1);
+                if (start > 2) pages.push('...');
+                for (let i = start; i <= end; i++) pages.push(i);
+                if (end < total - 1) pages.push('...');
+                pages.push(total);
+            }
+
+            for (const p of pages) {
+                if (p === '...') addEllipsis();
+                else addBtn(String(p), p, { active: p === current });
+            }
+
+            addBtn('›', current + 1, { disabled: current === total, ariaLabel: 'Next page' });
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderPage();
+            const offset = el.gamesContainer.getBoundingClientRect().top + window.scrollY - 120;
+            window.scrollTo({ top: Math.max(0, offset), behavior: 'smooth' });
+        }
+
+        // ============================================================
+        // SCROLL TOP
+        // ============================================================
+        window.addEventListener('scroll', () => {
+            el.scrollTopBtn.classList.toggle('show', window.scrollY > 600);
+        }, { passive: true });
+
+        el.scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ============================================================
+        // KEYBOARD SHORTCUTS
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            const active = document.activeElement;
+            const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
+
+            if (e.key === '/' && !isTyping) {
+                e.preventDefault();
+                el.searchInput.focus();
+                el.searchInput.select();
+                return;
+            }
+            if (e.key === 'Escape' && active === el.searchInput) {
+                el.searchInput.value = '';
+                setSearch('');
+                el.searchInput.blur();
             }
         });
-        
-        function scrollToTop() {
-            gamesContainer.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-        // Load games on page load
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        el.searchInput.addEventListener('input', onSearchInput);
+        el.searchInput.addEventListener('search', (e) => {
+            if (e.target.value === '') setSearch('');
+        });
+
         loadGames();
     </script>
 </body>
 </html>
-
